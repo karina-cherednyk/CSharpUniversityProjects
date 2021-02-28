@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budgets", "Budgets.csproj", "{8F7478C7-0C91-49D8-A7F6-7FA6CF0F6CF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Budgets", "Budgets.csproj", "{8F7478C7-0C91-49D8-A7F6-7FA6CF0F6CF9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{060B286A-E98C-45BE-95B3-CD5F169AAFED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budgets.Test", "..\Budgets.Test\Budgets.Test.csproj", "{F591321D-E26B-4644-AFDC-68276BA3B820}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{8F7478C7-0C91-49D8-A7F6-7FA6CF0F6CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F7478C7-0C91-49D8-A7F6-7FA6CF0F6CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F7478C7-0C91-49D8-A7F6-7FA6CF0F6CF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F591321D-E26B-4644-AFDC-68276BA3B820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F591321D-E26B-4644-AFDC-68276BA3B820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F591321D-E26B-4644-AFDC-68276BA3B820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F591321D-E26B-4644-AFDC-68276BA3B820}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F591321D-E26B-4644-AFDC-68276BA3B820} = {060B286A-E98C-45BE-95B3-CD5F169AAFED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5277AF5C-76AF-4482-AB7F-11F57E3D50D3}

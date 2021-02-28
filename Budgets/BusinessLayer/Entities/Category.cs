@@ -29,7 +29,7 @@ namespace Budgets.BusinessLayer.Entities
         this(name, description, null, null)
         { }
 
-        public string MyProperty
+        public string Color
         {
             get { return _color; }
             set { _color = value; HasChanges = true;  }
@@ -55,16 +55,11 @@ namespace Budgets.BusinessLayer.Entities
             set { _icon = value; HasChanges = true;  }
         }
 
-        public string Color
-        {
-            get { return _color; }
-            set { _color = value; HasChanges = true; }
-        }
 
         public override bool Validate()
         {
             bool validColor = _color == null || Validator.ValidateColor(_color);
-            bool validIcon = _color  == null || Validator.ValidateIcon(_icon);
+            bool validIcon = _icon == null || Validator.ValidateIcon(_icon);
 
             return
                 !string.IsNullOrWhiteSpace(_name) &

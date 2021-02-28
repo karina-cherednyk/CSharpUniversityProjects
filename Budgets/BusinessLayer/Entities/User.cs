@@ -12,7 +12,7 @@ namespace Budgets.BusinessLayer.Entities
         private HashSet<int> _categories;
 
 
-        User(int id, string firstName, string lastName, string email, HashSet<int> categories)
+        public User(int id, string firstName, string lastName, string email, HashSet<int> categories)
         {
             Id = id;
             _firstName = firstName;
@@ -21,7 +21,7 @@ namespace Budgets.BusinessLayer.Entities
             _categories = categories;
         }
 
-        User(string firstName, string lastName, string email): 
+        public User(string firstName, string lastName, string email): 
             this(++InstanceCount, firstName, lastName, email, new HashSet<int>() )
         {
             IsNew = true;
@@ -73,11 +73,11 @@ namespace Budgets.BusinessLayer.Entities
 
         public override bool Validate()
         {
-            bool validEmail = _email == null || Validator.ValidateEmail(_email);
+            bool validEmail =  Validator.ValidateEmail(_email);
 
             return
-                string.IsNullOrWhiteSpace(_firstName) &
-                string.IsNullOrWhiteSpace(_lastName) &
+                !string.IsNullOrWhiteSpace(_firstName) &
+                !string.IsNullOrWhiteSpace(_lastName) &
                 validEmail;
 
 

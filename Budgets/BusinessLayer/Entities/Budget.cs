@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Budgets.Common;
+using System;
 
 namespace Budgets.BusinessLayer.Entities
 {
@@ -17,7 +18,7 @@ namespace Budgets.BusinessLayer.Entities
         private HashSet<int> _categories;
         private List<Transaction> _transactions;
 
-        public Budget(int id, int owner,  HashSet<int> users, HashSet<int> categories, List<Transaction> transactions, string name, string description, double initialBalance )
+        public Budget(int id, int owner,  HashSet<int> users, HashSet<int> categories, List<Transaction> transactions, string name, string description, double initialBalance, Currency currency )
         {
             Id = id;
             Owner = owner;
@@ -27,15 +28,16 @@ namespace Budgets.BusinessLayer.Entities
             _name = name;
             _description = description;
             _initialBalance = initialBalance;
+            _currency = currency;
         }
 
-        public Budget(User user, string name, string description, double initialBalance):
-            this(++InstanceCount, user.Id, new HashSet<int>(), user.UsingCategories, new List<Transaction>(), name, description, initialBalance)
+        public Budget(User user, string name, string description, double initialBalance, Currency currency):
+            this(++InstanceCount, user.Id, new HashSet<int>(), user.UsingCategories, new List<Transaction>(), name, description, initialBalance, currency)
         {
             _users.Add(user.Id);
             IsNew = true;
         }
-        public Currency MyProperty
+        public Currency Currency
         {
             get { return _currency; }
             set {
@@ -71,7 +73,44 @@ namespace Budgets.BusinessLayer.Entities
                 return sum;
             }
         }
+        public double MonthLoss
+        {
+            get
+            {
+                DateTime nowD = DateTime.Now;
+                double sum = 0;
+                TimeSpan ts;
+                foreach (Transaction t in _transactions)
+                {
+                    ts = nowD.Subtract(t.Date);
+                    if(t.Sum < 0 & ts.TotalDays < 32)
+                    {
+                        sum -= Convertor.convert(t.Sum, t.Currency, _currency);
+                    }
+                }
 
+                return sum;
+            }
+        }
+        public double MonthProfit
+        {
+            get
+            {
+                DateTime nowD = DateTime.Now;
+                double sum = 0;
+                TimeSpan ts;
+                foreach (Transaction t in _transactions)
+                {
+                    ts = nowD.Subtract(t.Date);
+                    if (t.Sum > 0 & ts.TotalDays < 32)
+                    {
+                        sum += Convertor.convert(t.Sum, t.Currency, _currency);
+                    }
+                }
+
+                return sum;
+            }
+        }
 
         public HashSet<int> Users()
         {
@@ -159,7 +198,7 @@ namespace Budgets.BusinessLayer.Entities
             return
                 !string.IsNullOrWhiteSpace(Name) &
                 !string.IsNullOrWhiteSpace(Description) &
-                Balance > 0;
+                Balance >= 0;
 
         }
     }

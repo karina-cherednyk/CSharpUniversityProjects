@@ -6,6 +6,7 @@ namespace Budgets.BusinessLayer.Entities
 {
     public class Transaction: BaseEntity
     {
+        private static int InstanceCount { get; set; }
         private Currency _currency;
         private int _category;
         private string _description;
@@ -15,8 +16,9 @@ namespace Budgets.BusinessLayer.Entities
 
         public int User { get; }
 
-        public Transaction(int user, int sum, Currency cur, int cat, string desc, List<String> files)
+        public Transaction(int id, int user, double sum, Currency cur, int cat, string desc, List<string> files)
         {
+            Id = id;
             User = user;
             _sum = sum;
             _currency = cur;
@@ -25,9 +27,11 @@ namespace Budgets.BusinessLayer.Entities
             _files = files;
             _date = DateTime.Now;
         }
-        public Transaction(int user, int sum, Currency cur, int cat, string desc) :
-            this(user, sum, cur, cat, desc, null)
-        { }
+        public Transaction(User user, double sum, Currency cur, Category cat, string desc) :
+            this(++InstanceCount, user.Id, sum, cur, cat.Id, desc, new List<string>())
+        {
+            IsNew = true;
+        }
 
         public double Sum
         {
@@ -44,7 +48,10 @@ namespace Budgets.BusinessLayer.Entities
         public List<string> Files
         {
             get { return _files; }
-            set { _files = value; }
+        }
+        public void AddFile(string file)
+        {
+            _files.Add(file);
         }
 
         public string Description
@@ -69,15 +76,13 @@ namespace Budgets.BusinessLayer.Entities
         public override bool Validate()
         {
             bool validFiles = true;
-            if(_files != null)
-            {
-                foreach (string file in _files){
-                    validFiles &= Validator.ValidateFile(file);
-                }
+            foreach (string file in _files){
+                validFiles &= Validator.ValidateFile(file);
             }
-
+            
             return
                 !string.IsNullOrWhiteSpace(_description) &
+                _sum != 0 &
                 validFiles;
         }
 

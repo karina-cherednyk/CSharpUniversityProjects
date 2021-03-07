@@ -112,10 +112,6 @@ namespace Budgets.BusinessLayer.Entities
             }
         }
 
-        public HashSet<int> Users()
-        {
-            return _users;
-        }
 
         public bool AddUser(User user)
         {
@@ -187,10 +183,6 @@ namespace Budgets.BusinessLayer.Entities
                 return true;
             }
             return false;
-        }
-        public List<Transaction> Transactions()
-        {
-            return _transactions;
         }
 
         public override bool Validate()

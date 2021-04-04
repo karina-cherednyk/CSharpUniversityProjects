@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using BudgetsWPF.Authentication;
+using BudgetsWPF.Wallets;
 
 namespace BudgetsWPF
 {

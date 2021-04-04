@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace BudgetsWPF
+namespace BudgetsWPF.Authentication
 {
     public class DBUser: IStorable
     {
-        public Guid Guid { get; }
-        public string Email { get; }
-        public string Login { get; }
-        public string Password { get; }
+        public Guid   Guid      { get; }
+        public string Email     { get; set; }
+        public string Login     { get; set; }
+        public string Password  { get; set; }
 
 
         [JsonConstructor]
@@ -24,6 +24,10 @@ namespace BudgetsWPF
             this.Login = login;
             this.Email = email;
             this.Password = password;
+            this.Guid = Guid.NewGuid();
+        }
+        public DBUser()
+        {
             this.Guid = Guid.NewGuid();
         }
 

@@ -15,82 +15,25 @@ using System.Windows.Shapes;
 
 namespace BudgetsWPF.Authentication
 {
-    /// <summary>
-    /// Interaction logic for SignUpView.xaml
-    /// </summary>
     public partial class SignUpView : UserControl
     {
-        AuthenticationService authService;
-        Action toSignIn;
-        Action<DBUser> toWallets;
 
+        private SignUpViewModel _viewModel;
 
-        public SignUpView(Action goToSignInView, Action<DBUser> goToWalletsView)
+        public SignUpView(Action goToSignIn, Action<DBUser> goToWallets)
         {
             InitializeComponent();
-            authService = new AuthenticationService();
-            toSignIn = goToSignInView;
-            toWallets = goToWalletsView;
+            _viewModel = new SignUpViewModel(goToSignIn, goToWallets);
+            DataContext = _viewModel;
         }
-        private bool checkInput(Control box, bool correct, string error)
+        private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (correct)
-            {
-                box.ToolTip = "";
-                box.Background = Brushes.Transparent;
-            }
-            else
-            {
-                box.ToolTip = error;
-                box.Background = Brushes.LightPink;
-            }
-            return correct;
+            _viewModel.Password = Password.Password;
         }
-
-        async private void DoSignUp(object sender, RoutedEventArgs e)
+        private void OnPassword2Changed(object sender, RoutedEventArgs e)
         {
-            var allCorrect = true;
-            var login = LoginInput.Text.Trim();
-            var pass = PassInput.Password.Trim();
-            var pass2 = PassRepeatInput.Password.Trim();
-            var email = EmailInput.Text.Trim();
-
-
-            allCorrect &= checkInput(LoginInput,
-                login.Length > 1, "Login length > 1");
-            allCorrect &= checkInput(EmailInput,
-                email.Contains("@"),
-                "Incorrect email");
-            allCorrect &= checkInput(PassInput,
-                pass.Length > 1,
-                "Password length > 1");
-            allCorrect &= checkInput(PassRepeatInput,
-                pass == pass2,
-                "Passwords not the same");
-
-
-
-            if (allCorrect)
-            {
-                this.IsEnabled = false;
-                DBUser u = new DBUser(login, email, pass);
-                try
-                {
-                    await authService.RegisterUserAsync(u);
-                    toWallets(u);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                this.IsEnabled = true;
-            }
-
+            _viewModel.Password2 = Password2.Password;
         }
 
-        private void ToSignInView(object sender, RoutedEventArgs e)
-        {
-            toSignIn();
-        }
     }
 }

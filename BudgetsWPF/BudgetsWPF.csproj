@@ -46,6 +46,9 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\Budgets\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Prism, Version=8.0.0.1909, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\Budgets\packages\Prism.Core.8.0.0.1909\lib\net47\Prism.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\Budgets\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -95,6 +98,7 @@
     </ApplicationDefinition>
     <Compile Include="Authentication\AuthenticationService.cs" />
     <Compile Include="Authentication\SignInViewModel.cs" />
+    <Compile Include="Authentication\SignUpViewModel.cs" />
     <Compile Include="MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -119,7 +123,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DBUser.cs" />
+    <Compile Include="Authentication\DBUser.cs" />
     <Compile Include="FileDataStorage.cs" />
     <Compile Include="IStorable.cs" />
     <Compile Include="MainWindow.xaml.cs">

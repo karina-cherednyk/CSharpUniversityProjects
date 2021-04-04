@@ -16,10 +16,10 @@
                 Command="{Binding SignUpCommand}"
                 />
 
-        <TextBox x:Name="LoginInput" 
+        <TextBox 
                  md:HintAssist.Hint="Enter login" 
                  Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"/>
-        <PasswordBox x:Name="PassInput" 
+        <PasswordBox x:Name="Password" 
                      md:HintAssist.Hint="Enter password"
                      PasswordChanged="OnPasswordChanged"   
                      />

@@ -11,19 +11,24 @@
         <TextBlock Text="Registration Form" 
                            FontSize="30" FontWeight="Bold" Margin="0 0 0 20" />
 
-        <Button Click="ToSignInView" HorizontalAlignment="Left" Content="Sign in" 
-                            Style="{StaticResource MaterialDesignFlatButton}" Margin="0 10"/>
+        <Button Command="{Binding SignInCommand}"
+                HorizontalAlignment="Left" Content="Sign in" 
+                Style="{StaticResource MaterialDesignFlatButton}" Margin="0 10"/>
+
+        <TextBox     Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"   
+                     md:HintAssist.Hint="Enter login"/>
+        <PasswordBox x:Name="Password"
+                     PasswordChanged="OnPasswordChanged"
+                     md:HintAssist.Hint="Enter password" />
+        <PasswordBox x:Name="Password2"
+                     PasswordChanged="OnPassword2Changed"
+                     md:HintAssist.Hint="Repeat password" />
+        <TextBox     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"   
+                     md:HintAssist.Hint="Enter email"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         
-        <TextBox x:Name="LoginInput" 
-                         md:HintAssist.Hint="Enter login"/>
-        <PasswordBox x:Name="PassInput" 
-                             md:HintAssist.Hint="Enter password" />
-        <PasswordBox x:Name="PassRepeatInput"
-                             md:HintAssist.Hint="Repeat password" />
-        <TextBox     x:Name="EmailInput"
-                             md:HintAssist.Hint="Enter email"
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
         <Button Content="Sign up" Margin="0 20"
-                        Click="DoSignUp"/>
+                Command="{Binding SignUpCommand}"
+                />
     </StackPanel>
 </UserControl>

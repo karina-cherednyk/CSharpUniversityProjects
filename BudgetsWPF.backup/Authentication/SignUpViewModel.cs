@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Budgets.BusinessLayer.Entities;
 using Prism.Commands;
 
 namespace BudgetsWPF.Authentication
@@ -11,14 +10,14 @@ namespace BudgetsWPF.Authentication
     {
         private readonly AuthenticationService _authService = new AuthenticationService();
         private readonly Action _goToSignIn;
-        private readonly Action<User> _goToWallets;
-        private readonly AuthUser _regUser = new AuthUser();
+        private readonly Action<DBUser> _goToWallets;
+        private readonly DBUser _regUser = new DBUser();
 
         public DelegateCommand SignUpCommand { get; }
         public DelegateCommand SignInCommand { get; }
 
 
-        public SignUpViewModel(Action goToSignIn, Action<User> goToWallets)
+        public SignUpViewModel(Action goToSignIn, Action<DBUser> goToWallets)
         {
             _goToSignIn = goToSignIn;
             _goToWallets = goToWallets;
@@ -31,8 +30,8 @@ namespace BudgetsWPF.Authentication
         {
            try
             {
-                var user = await _authService.RegisterUserAsync(_regUser);
-                _goToWallets.Invoke(user);
+                await _authService.RegisterUserAsync(_regUser);
+                _goToWallets.Invoke(_regUser);
             }
             catch (Exception ex)
             {

@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using Budgets.BusinessLayer.Entities;
 using BudgetsWPF.Authentication;
 using BudgetsWPF.Wallets;
 
@@ -20,7 +19,7 @@ namespace BudgetsWPF
         {
             Content = new SignInView(GoToSignUpView, GoToWalletsView);
         }
-        public void GoToWalletsView(User user)
+        public void GoToWalletsView(DBUser user)
         {
             Content = new WalletsView(user, GoToSignInView);
         }

@@ -1,5 +1,4 @@
-﻿using Budgets.BusinessLayer.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,25 +9,22 @@ using System.Windows.Data;
 
 namespace BudgetsWPF.Authentication
 {
-    public partial class SignUpView : UserControl
+
+    public partial class SignInView : UserControl
     {
+        private SignInViewModel _viewModel;
 
-        private SignUpViewModel _viewModel;
-
-        public SignUpView(Action goToSignIn, Action<User> goToWallets)
+        public SignInView(Action goToSignUp, Action<DBUser> goToWallets)
         {
             InitializeComponent();
-            _viewModel = new SignUpViewModel(goToSignIn, goToWallets);
+            _viewModel = new SignInViewModel(goToSignUp, goToWallets);
             DataContext = _viewModel;
         }
+
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
             _viewModel.Password = Password.Password;
         }
-        private void OnPassword2Changed(object sender, RoutedEventArgs e)
-        {
-            _viewModel.Password2 = Password2.Password;
-        }
-
     }
+
 }

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
-using Budgets.BusinessLayer.Entities;
-
+using BudgetsWPF.Authentication;
 
 namespace BudgetsWPF.Wallets
 {
@@ -9,7 +10,7 @@ namespace BudgetsWPF.Wallets
     {
 
         private WalletsViewModel _viewModel;
-        public WalletsView(User user, Action goToSignInView)
+        public WalletsView(DBUser user, Action goToSignInView)
         {
             InitializeComponent();
             _viewModel = new WalletsViewModel();

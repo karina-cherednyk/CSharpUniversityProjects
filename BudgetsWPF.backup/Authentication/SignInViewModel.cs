@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Budgets.BusinessLayer.Entities;
 using Prism.Commands;
 
 namespace BudgetsWPF.Authentication
@@ -12,13 +11,13 @@ namespace BudgetsWPF.Authentication
 
         private readonly AuthenticationService _authService = new AuthenticationService();
         private readonly Action _goToSignUp;
-        private readonly Action<User> _goToWallets;
+        private readonly Action<DBUser> _goToWallets;
 
         public DelegateCommand SignInCommand { get; }
         public DelegateCommand SignUpCommand { get; }
 
 
-        public SignInViewModel(Action goToSignUp, Action<User> goToWallets)
+        public SignInViewModel(Action goToSignUp, Action<DBUser> goToWallets)
         {
             _goToSignUp = goToSignUp;
             _goToWallets = goToWallets;
@@ -30,27 +29,30 @@ namespace BudgetsWPF.Authentication
 
         private bool IsSignInEnabled()
         {
-            return !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password);
+            return !String.IsNullOrWhiteSpace(Login) && !String.IsNullOrWhiteSpace(Password);
         }
 
         async private void SignIn()
         {
-            if(string.IsNullOrWhiteSpace(Login) ||
-                string.IsNullOrEmpty(Password))
+            if(String.IsNullOrWhiteSpace(Login) ||
+                String.IsNullOrEmpty(Password))
             {
                 MessageBox.Show("Login or password is empty");
             }
             else
             {
+                DBUser user;
                 try
                 {
-                    var user = await _authService.AuthenticateAsync(_authUser);
-                    _goToWallets.Invoke(user);
+                    user = await _authService.AuthenticateAsync(_authUser);
                 }
                 catch(Exception ex)
                 {
                     MessageBox.Show($"Sign In failed: {ex.Message}");
+                    return;
                 }
+                MessageBox.Show($"Sign In was successful for user {user.Login}");
+                _goToWallets.Invoke(user);
             }
         }
 
@@ -62,7 +64,7 @@ namespace BudgetsWPF.Authentication
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private AuthUser _authUser = new AuthUser();
+        private DBUser _authUser = new DBUser();
         public string Login
         {
             get

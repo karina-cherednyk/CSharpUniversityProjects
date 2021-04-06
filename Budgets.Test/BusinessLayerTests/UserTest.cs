@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Budgets.BusinessLayer.Entities;
 using Xunit;
 
@@ -9,45 +10,35 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void ValidateValid()
         {
-            var c = new User("Bob", "Johns", "a@a.com");
+            var c = new User(Guid.NewGuid(), "Bob", "Johns", "a@a.com");
             Assert.True(c.IsValid);
         }
 
         [Fact]
         public void ValidateInvalidName()
         {
-            var c = new User(null, "Johns", "a@a.com");
+            var c = new User(Guid.NewGuid(), null, "Johns", "a@a.com");
             Assert.False(c.IsValid);
         }
         [Fact]
         public void ValidateInvalidSurname()
         {
-            var c = new User("Bob", "", "a@a.com");
+            var c = new User(Guid.NewGuid(), "Bob", "", "a@a.com");
             Assert.False(c.IsValid);
         }
 
         [Fact]
         public void ValidateInvalidEmal()
         {
-            var c = new User("Bob", "Johns", "aa.com");
+            var c = new User(Guid.NewGuid(), "Bob", "Johns", "aa.com");
             Assert.False(c.IsValid);
         }
 
-        [Fact]
-        public void CounterTest()
-        {
-            var c1 = new User("Bob", "Johns", "a@a.com");
-            var c2 = new User("Bob", "Johns", "a@a.com");
-            var c3 = new User("Bob", "Johns", "a@a.com");
-
-            Assert.Equal(c2.Id, c1.Id + 1);
-            Assert.Equal(c3.Id, c2.Id + 1);
-        }
 
         [Fact]
         public void NewRecordTest()
         {
-            var c = new User("Bob", "Johns", "a@a.com");
+            var c = new User(Guid.NewGuid(), "Bob", "Johns", "a@a.com");
 
             Assert.True(c.IsNew);
         }
@@ -55,8 +46,7 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void ExistingRecordTest()
         {
-            var uId = 1;
-            var c = new User(uId, "Bob", "Johns", "a@a.com", new HashSet<int>());
+            var c = new User(Guid.NewGuid(),  "Bob", "Johns", "a@a.com", new HashSet<Guid>(), new HashSet<Guid>());
 
             Assert.False(c.IsNew);
         }
@@ -64,22 +54,22 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void AddNewCategory()
         {
-            var c = new User("Bob", "Johns", "a@a.com");
+            var c = new User(Guid.NewGuid(), "Bob", "Johns", "a@a.com");
             var ca = new Category("food", "restaurants transactiosn");
             var cb = new Category("food", "restaurants transactiosn");
 
-            Assert.True(c.addCategory(ca));
-            Assert.True(c.addCategory(cb));
+            Assert.True(c.AddCategory(ca));
+            Assert.True(c.AddCategory(cb));
         }
 
         [Fact]
         public void AddExistingCategory()
         {
-            var c = new User("Bob", "Johns", "a@a.com");
+            var c = new User(Guid.NewGuid(), "Bob", "Johns", "a@a.com");
             var ca = new Category("food", "restaurants transactiosn");
 
-            Assert.True(c.addCategory(ca));
-            Assert.False(c.addCategory(ca));
+            Assert.True(c.AddCategory(ca));
+            Assert.False(c.AddCategory(ca));
         }
     }
 }

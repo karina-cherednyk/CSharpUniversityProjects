@@ -2,47 +2,48 @@
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
 using System.Collections.Generic;
+using System;
 
 namespace Budgets.Test.BusinessLayerTests
 {
     public class BudgetTest
     {
-        private User u = new User("Bob", "Johns", "a@a.com");
+        private User u = new User(Guid.NewGuid(), "Bob", "Johns", "a@a.com");
         private Category ca = new Category("food", "restaurants transactions");
         public BudgetTest(){
-            u.addCategory(ca);
+            u.AddCategory(ca);
         }
 
         [Fact]
         public void ValidateValid()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.UAH);
+            var c = new Wallet(u, "b1", "d1", 0, Currency.UAH);
             Assert.True(c.IsValid);
         }
 
         [Fact]
         public void ValidateInvalidName()
         {
-            var c = new Budget(u, null, "d1", 0, Currency.UAH);
+            var c = new Wallet(u, null, "d1", 0, Currency.UAH);
             Assert.False(c.IsValid);
         }
         [Fact]
         public void ValidateInvalidDescription()
         {
-            var c = new Budget(u, "b1", "", 0, Currency.UAH);
+            var c = new Wallet(u, "b1", "", 0, Currency.UAH);
             Assert.False(c.IsValid);
         }
 
         [Fact]
         public void ValidateInvalidInitialBudget()
         {
-            var c = new Budget(u, "b1", "d1", -10, Currency.UAH);
+            var c = new Wallet(u, "b1", "d1", -10, Currency.UAH);
             Assert.False(c.IsValid);
         }
         [Fact]
         public void CheckMonthProfit()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.EUR);
+            var c = new Wallet(u, "b1", "d1", 0, Currency.EUR);
             var profit = 10.0;
             var t1 = new Transaction(u, profit, Currency.EUR, ca, "a");
             var t2 = new Transaction(u, -100, Currency.EUR, ca, "a");
@@ -58,7 +59,7 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void CheckMonthLoss()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.EUR);
+            var c = new Wallet(u, "b1", "d1", 0, Currency.EUR);
             var loss = 10.0;
             var t1 = new Transaction(u, -loss, Currency.EUR, ca, "a");
             var t2 = new Transaction(u, 100, Currency.EUR, ca, "a");
@@ -76,7 +77,7 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void CheckBalance()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.EUR);
+            var c = new Wallet(u, "b1", "d1", 0, Currency.EUR);
             var t1 = new Transaction(u, 10, Currency.EUR, ca, "a");
             var t2 = new Transaction(u, 10, Currency.EUR, ca, "a");
             Assert.True(c.AddTransaction(t1));
@@ -90,7 +91,7 @@ namespace Budgets.Test.BusinessLayerTests
             var addUah = 10;
             var resEuro = initEu + Convertor.convert(addUah, Currency.UAH, Currency.EUR);
 
-            var c = new Budget(u, "b1", "d1", initEu, Currency.EUR);
+            var c = new Wallet(u, "b1", "d1", initEu, Currency.EUR);
             var t1 = new Transaction(u, 10, Currency.UAH, ca, "a");
             c.AddTransaction(t1);
 
@@ -99,7 +100,7 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void AddTransactionOfNotAllowedCategory()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.EUR);
+            var c = new Wallet(u, "b1", "d1", 0, Currency.EUR);
             var  cb  = new Category("food1", "restaurants transactions");
             var t1 = new Transaction(u, 10, Currency.EUR, cb, "a");
             Assert.False(c.AddTransaction(t1));
@@ -107,7 +108,7 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void AllowCategoryAndAddTransaction()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.EUR);
+            var c = new Wallet(u, "b1", "d1", 0, Currency.EUR);
             var cb = new Category("food1", "restaurants transactions");
             var t1 = new Transaction(u, 10, Currency.EUR, cb, "a");
             c.AddCategory(cb);
@@ -116,16 +117,16 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void AddTransactionFromNotAllowedUser()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.EUR);
-            var u1 = new User("Bob", "Johns", "a@a.com");
+            var c = new Wallet(u, "b1", "d1", 0, Currency.EUR);
+            var u1 = new User(Guid.NewGuid(), "Bob", "Johns", "a@a.com");
             var t1 = new Transaction(u1, 10, Currency.EUR, ca, "a");
             Assert.False(c.AddTransaction(t1));
         }
         [Fact]
         public void AllowUserAndAddTransaction()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.EUR);
-            var u1 = new User("Bob", "Johns", "a@a.com");
+            var c = new Wallet(u, "b1", "d1", 0, Currency.EUR);
+            var u1 = new User(Guid.NewGuid(), "Bob", "Johns", "a@a.com");
             var t1 = new Transaction(u1, 10, Currency.EUR, ca, "a");
             c.AddUser(u1);
             Assert.True(c.AddTransaction(t1));
@@ -134,7 +135,7 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void AddTransactionTwice()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.EUR);
+            var c = new Wallet(u, "b1", "d1", 0, Currency.EUR);
             var t1 = new Transaction(u, 10, Currency.EUR, ca, "a");
             Assert.True(c.AddTransaction(t1));
             Assert.False(c.AddTransaction(t1));
@@ -145,7 +146,7 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void NewRecordTest()
         {
-            var c = new Budget(u, "b1", "d1", 0, Currency.UAH);
+            var c = new Wallet(u, "b1", "d1", 0, Currency.UAH);
 
             Assert.True(c.IsNew);
         }
@@ -153,8 +154,8 @@ namespace Budgets.Test.BusinessLayerTests
         [Fact]
         public void ExistingRecordTest()
         {
-            var c = new Budget(1, 1, 
-                new HashSet<int>(), new HashSet<int>(), 
+            var c = new Wallet(Guid.NewGuid(), Guid.NewGuid(), 
+                new HashSet<Guid> (), new HashSet<Guid> (), 
                 new List<Transaction>(),"a", 
                 "b", 0, Currency.UAH);
 
@@ -162,15 +163,6 @@ namespace Budgets.Test.BusinessLayerTests
             Assert.False(c.IsNew);
         }
 
-        [Fact]
-        public void CounterTest()
-        {
-            var c1 = new Budget(u, "b1", "d1", 0, Currency.UAH);
-            var c2 = new Budget(u, "b1", "d1", 0, Currency.UAH);
-            var c3 = new Budget(u, "b1", "d1", 0, Currency.UAH);
 
-            Assert.Equal(c2.Id, c1.Id + 1);
-            Assert.Equal(c3.Id, c2.Id + 1);
-        }
     }
 }

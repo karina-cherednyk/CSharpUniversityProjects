@@ -1,86 +1,55 @@
 using Budgets.Common;
+using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Budgets.BusinessLayer.Entities
 {
-	public class User : BaseEntity
+	public class User : BaseEntity, ICategorizable
     {
-        private static int InstanceCount { get; set; }
-        private string _lastName;
-        private string _firstName;
-        private string _email;
-        private HashSet<int> _categories;
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string Email { get; set; }
 
+        [JsonIgnore]
+        public HashSet<Category> Categories  => _categories; 
+        [JsonIgnore]
+        public HashSet<Wallet> Wallets => _wallets; 
 
-        public User(int id, string firstName, string lastName, string email, HashSet<int> categories)
+        
+        private HashSet<Category> _categories;
+        private HashSet<Wallet> _wallets;
+
+        public User(Guid id,  string firstName, string lastName, string email)
         {
             Id = id;
-            _firstName = firstName;
-            _lastName = lastName;
-            _email = email;
-            _categories = categories;
-        }
-
-        public User(string firstName, string lastName, string email): 
-            this(++InstanceCount, firstName, lastName, email, new HashSet<int>() )
-        {
-            IsNew = true;
-        }
-
-        public string Email
-        {
-            get { return _email; }
-            set { _email = value; HasChanges = true; }
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            _categories = new();
+            _wallets = new();
         }
 
 
-        public string FirstName
-        {
-            get { return _firstName; }
-            set { _firstName = value; HasChanges = true; }
-        }
-
-
-        public string LastName
-        {
-            get { return _lastName; }
-            set { _lastName = value; HasChanges = true; }
-        }
-
-        public HashSet<int> UsingCategories
-        {
-            get { return _categories; }
-        }
-
-        public bool addCategory(Category category)
-        {
-            if (_categories.Add(category.Id))
-            {
-                HasChanges = true;
-                return true;
-            }
-            return false;
-        }
-        public bool removeCategory(Category category)
-        {
-           if(_categories.Remove(category.Id))
-            {
-                HasChanges = true;
-                return true;
-            }
-            return false;
-        }
+        public bool HasWallet(Wallet w) => _wallets.Contains(w);
+        public bool AddCategory(Category category) => _categories.Add(category);
+        public bool AddWallet(Wallet wallet) => _wallets.Add(wallet);
+        public bool RemoveCategory(Category category) => _categories.Remove(category);
+        public bool HasCategory(Category category) => _categories.Contains(category);
+        public bool RemoveWallet(Wallet wallet) => _wallets.Remove(wallet);
+   
 
         public override bool Validate()
         {
-            bool validEmail =  Validator.ValidateEmail(_email);
+            bool validEmail =  Validator.ValidateEmail(Email);
 
             return
-                !string.IsNullOrWhiteSpace(_firstName) &
-                !string.IsNullOrWhiteSpace(_lastName) &
+                !string.IsNullOrWhiteSpace(FirstName) &
+                !string.IsNullOrWhiteSpace(LastName) &
                 validEmail;
 
-
         }
+
+
     }
 }

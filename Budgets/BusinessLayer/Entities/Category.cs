@@ -1,69 +1,43 @@
+using System;
+using System.Text.Json.Serialization;
 using Budgets.Common;
 
 namespace Budgets.BusinessLayer.Entities
 {
     public class Category: BaseEntity
     {
-        private static int InstanceCount { get; set; }
-        private string _name;
-        private string _description;
-        private string _color;
-        private string _icon;
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Color { get; set; }
+        public string Icon { get; set; }
 
-        public Category(int id, string name, string description, string color, string icon)
+        [JsonConstructor]
+        public Category(Guid id, string name, string description, string color, string icon)
         {
             Id = id;
-            _name = name;
-            _description = description;
-            _color = color;
-            _icon = icon;
+            Name = name;
+            Description = description;
+            Color = color;
+            Icon = icon;
         }
 
         public Category(string name, string description, string color, string icon):
-            this(++InstanceCount, name, description, color, icon)
-        {
-            IsNew = true;
-        }
+            this(Guid.NewGuid(), name, description, color, icon)
+        { }
 
         public Category( string name, string description) :
         this(name, description, null, null)
         { }
 
-        public string Color
-        {
-            get { return _color; }
-            set { _color = value; HasChanges = true;  }
-        }
-
-
-        public string Description
-        {
-            get { return _description; }
-            set { _description = value; HasChanges = true;  }
-        }
-
-
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; HasChanges = true;  }
-        }
-
-        public string Icon
-        {
-            get { return _icon; }
-            set { _icon = value; HasChanges = true;  }
-        }
-
-
+      
         public override bool Validate()
         {
-            bool validColor = _color == null || Validator.ValidateColor(_color);
-            bool validIcon = _icon == null || Validator.ValidateIcon(_icon);
+            bool validColor = Color == null || Validator.ValidateColor(Color);
+            bool validIcon = Icon == null || Validator.ValidateIcon(Icon);
 
             return
-                !string.IsNullOrWhiteSpace(_name) &
-                !string.IsNullOrWhiteSpace(_description) &
+                !string.IsNullOrWhiteSpace(Name) &
+                !string.IsNullOrWhiteSpace(Description) &
                 validColor & validIcon;
         }
     }

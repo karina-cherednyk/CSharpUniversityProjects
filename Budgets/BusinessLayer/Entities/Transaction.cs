@@ -1,90 +1,65 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Budgets.Common;
 
 namespace Budgets.BusinessLayer.Entities
 {
-    public class Transaction: BaseEntity
+    public class Transaction: BaseEntity, ICategorizable
     {
-        private static int InstanceCount { get; set; }
-        private Currency _currency;
-        private int _category;
-        private string _description;
-        private DateTime _date;
-        private double _sum;
-        private List<string> _files;
+        [JsonIgnore]
+        public User User { get; set;  }
+        public double Sum { get; set; }
+        public DateTime Date { get; set; }
+        public List<string> Files { get; private set; }
+        public string Description { get; set; }
+        public Currency Currency { get; set; }
 
-        public int User { get; }
+        [JsonIgnore]
+        public Category Category { get; set; }
 
-        public Transaction(int id, int user, double sum, Currency cur, int cat, string desc, List<string> files)
+        [JsonConstructor]
+        public Transaction(Guid id,  DateTime date, double sum, Currency currency, Category category, string description, List<string> files):
+        this(id, null, sum, currency, category, description, files )
+        {
+            Date = date;
+        }
+
+        public Transaction(Guid id, User user, double sum, Currency cur, Category cat, string desc, List<string> files)
         {
             Id = id;
             User = user;
-            _sum = sum;
-            _currency = cur;
-            _category = cat;
-            _description = desc;
-            _files = files;
-            _date = DateTime.Now;
+            Sum = sum;
+            Currency = cur;
+            Category = cat;
+            Description = desc;
+            Files = files;
+            Date = DateTime.Now;
+            Files = new();
         }
         public Transaction(User user, double sum, Currency cur, Category cat, string desc) :
-            this(++InstanceCount, user.Id, sum, cur, cat.Id, desc, new List<string>())
-        {
-            IsNew = true;
-        }
+            this(Guid.NewGuid(), user, sum, cur, cat, desc, new List<string>())
+        {}
 
-        public double Sum
+        public void AddFile(string file) => Files.Add(file);
+        public bool HasCategory(Category category) => Category == category;
+        public bool AddCategory(Category category)
         {
-            get { return _sum; }
-            set { _sum = value; HasChanges = true; }
+            Category = category;
+            return true;
         }
-
-
-        public DateTime Date
-        {
-            get { return _date; }
-            set { _date = value; HasChanges = true; }
-        }
-        public List<string> Files
-        {
-            get { return _files; }
-        }
-        public void AddFile(string file)
-        {
-            _files.Add(file);
-        }
-
-        public string Description
-        {
-            get { return _description; }
-            set { _description = value; HasChanges = true; }
-        }
-
-
-        public Currency Currency
-        {
-            get { return _currency; }
-            set { _currency = value; HasChanges = true; }
-        }
-
-        public int Category
-        {
-            get { return _category; }
-            set { _category = value; HasChanges = true; }
-        }
-
         public override bool Validate()
         {
             bool validFiles = true;
-            foreach (string file in _files){
+            foreach (string file in Files)
+            {
                 validFiles &= Validator.ValidateFile(file);
             }
-            
+
             return
-                !string.IsNullOrWhiteSpace(_description) &
-                _sum != 0 &
+                !string.IsNullOrWhiteSpace(Description) &
+                Sum != 0 &
                 validFiles;
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budgets.BusinessLayer.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace BudgetsWPF.Authentication
     {
         private SignInViewModel _viewModel;
 
-        public SignInView(Action goToSignUp, Action<DBUser> goToWallets)
+        public SignInView(Action goToSignUp, Action<User> goToWallets)
         {
             InitializeComponent();
             _viewModel = new SignInViewModel(goToSignUp, goToWallets);

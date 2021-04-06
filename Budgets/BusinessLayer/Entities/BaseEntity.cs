@@ -1,3 +1,6 @@
+using System;
+using System.Text.Json.Serialization;
+
 namespace Budgets.BusinessLayer.Entities
 {
     public enum EntityState
@@ -5,11 +8,12 @@ namespace Budgets.BusinessLayer.Entities
         Active,
         Deleted
     }
-    public abstract class BaseEntity
+    public abstract class BaseEntity: IStorable
     {
-        public int Id { get; protected set; }
-        public bool IsNew { get; protected set; }
-        public bool HasChanges { get; protected set; }
+     
+        public Guid Id { get; protected set; }
+
+        [JsonIgnore]
         public bool IsValid
         {
             get
@@ -17,7 +21,9 @@ namespace Budgets.BusinessLayer.Entities
                 return Validate();
             }
         }
-        public EntityState State { get; set; }
+
+        [JsonIgnore]
+        public Guid Guid => Id;
 
         public abstract bool Validate();
         public override bool Equals(object obj)
@@ -32,9 +38,10 @@ namespace Budgets.BusinessLayer.Entities
                 return p.Id == Id;
             }
         }
+
         public override int GetHashCode()
         {
-            return Id;
+            return Id.GetHashCode();
         }
     }
 }

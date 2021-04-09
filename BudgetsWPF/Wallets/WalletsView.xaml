@@ -5,28 +5,65 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetsWPF.Wallets"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             >
     <UserControl.Resources>
         <DataTemplate DataType="{ x:Type local:WalletDetailsViewModel}">
             <local:WalletDetailsView></local:WalletDetailsView>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid Background="White">
+    <Grid  Background="White" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="100"></ColumnDefinition>
-            <ColumnDefinition Width="2"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="*" MinWidth="150"/>
+                <ColumnDefinition Width="*" MinWidth="150"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="6*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock      MaxWidth="120"
+                        Text="Welcome" />
+
+        <TextBox        Grid.Row="1" MaxWidth="120"
+                        Text="{Binding Name}"  />
+
+        <TextBox        Grid.Row="1" MaxWidth="120"
+                        Grid.Column="1"
+                        Text="{Binding Surname}" />
+        
         <!--Menu-->
-        <ListView   Grid.RowSpan="2" 
+        <ListView   Grid.ColumnSpan="3" 
+                    Grid.Row="2"
                     ItemsSource="{Binding Wallets}" 
                     DisplayMemberPath="DisplayName" 
                     SelectedItem="{Binding CurrentWallet}"/>
 
-       <GridSplitter Grid.Column="1" 
-                      HorizontalAlignment="Stretch"/>  
+        <GridSplitter   Width="3"
+                        Grid.Column="3" 
+                        Grid.Row="2"
+                        HorizontalAlignment="Stretch"/>  
         <!--Content-->
-        <ContentControl Grid.Column="2" 
+        <ContentControl Grid.Column="4" 
+                        Grid.Row="2"
                         Content="{Binding CurrentWallet}"/>
-    </Grid>
+
+        <Button Grid.Column="0"
+                Grid.Row="3"
+                MaxWidth="120"
+                Content="Add new wallet" 
+                Command="{Binding AddWalletCommand}"/>
+            
+        <Button Grid.Column="1"
+                Grid.Row="3"
+                MaxWidth="120"
+                Content="Go to Sign In" 
+                Command="{Binding SignInCommand}"/>
+        </Grid>
+        
+
 </UserControl>

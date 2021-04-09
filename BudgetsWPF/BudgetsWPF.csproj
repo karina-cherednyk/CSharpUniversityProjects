@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Budgets\Budgets.csproj" />
+    <ProjectReference Include="..\BugetsStorage\BugetsStorage.csproj" />
   </ItemGroup>
   <Import Project="..\Budgets\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\Budgets\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets')" />
 </Project>

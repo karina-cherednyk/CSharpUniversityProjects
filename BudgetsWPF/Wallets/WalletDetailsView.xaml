@@ -5,26 +5,93 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetsWPF.Wallets"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             d:DesignHeight="800" d:DesignWidth="800">
+    <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" >
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Name"
                        />
-            <TextBox MinWidth="300" Margin="10" 
+            <TextBlock MinWidth="300" Margin="10" 
                      HorizontalAlignment="Stretch" 
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding Name}"/>
+        </StackPanel>
+        <StackPanel 
+                Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Categories"
+                       />
+            <ListBox 
+                ItemsSource="{Binding Categories}"
+                HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                             <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Name}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Margin="10, 10, 10, 0"
+                    Content="Add New Category"
+                    Command="{Binding AddCategoryCommand}"
+                    />
         </StackPanel>
         <StackPanel Grid.Row="1" >
             <TextBlock Margin="10, 10, 10, 0"
-                       Text="Balance"/>
-            <TextBox MinWidth="300" Margin="10" 
-                     HorizontalAlignment="Stretch" 
-                     Text="{Binding Balance, UpdateSourceTrigger=PropertyChanged}"/>
+                       Text="Choose currency:"/>
+            <ComboBox 
+                      IsSynchronizedWithCurrentItem="True"
+                      ItemsSource="{ Binding Currencies }"
+                      SelectedItem="{Binding SelectedCurrency}"
+                      Margin="10, 10, 10, 0"/>
         </StackPanel>
+        <StackPanel Grid.Row="2" >
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Balance"/>
+            
+            <TextBlock MinWidth="300" Margin="10" 
+                     HorizontalAlignment="Stretch" 
+                     Text="{Binding Balance}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" >
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Month Loss"/>
+            <TextBlock MinWidth="300" Margin="10" 
+                     HorizontalAlignment="Stretch" 
+                     Text="{Binding MonthLoss}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="1">
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Month Profit"/>
+            <TextBlock MinWidth="300" Margin="10" 
+                     HorizontalAlignment="Stretch" 
+                     Text="{Binding MonthProfit}"/>
+        </StackPanel>
+        <Button 
+            Margin="10 0"
+            Grid.Row="4" Grid.Column="0"
+            Content="Show Transactions" 
+            Command="{Binding ShowTransactionsCommand}"
+            />
+        <Button 
+            Margin="10 0"
+            Grid.Row="4" Grid.Column="1"
+            Content="Delete Wallet" 
+            Command="{Binding RemoveWalletCommand}"
+            />
     </Grid>
 </UserControl>

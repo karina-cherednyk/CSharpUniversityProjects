@@ -10,7 +10,7 @@ namespace Budgets.BusinessLayer.Entities
 
         public Guid Owner { get;  }
         public string Name { get; set; }
-        public double InitialBalance { get; private set; }
+        public decimal InitialBalance { get; private set; }
         public string Description { get; set; }
 
         [JsonIgnore]
@@ -28,12 +28,12 @@ namespace Budgets.BusinessLayer.Entities
             get { return _currency; }
             set
             {
-                InitialBalance = Convertor.convert(InitialBalance, _currency, value);
+                InitialBalance = CurrencyConvertor.convert(InitialBalance, _currency, value);
                 _currency = value;
             }
         }
         [JsonConstructor]
-        public Wallet(Guid id, Guid owner, string name, string description, double initialBalance, Currency currency )
+        public Wallet(Guid id, Guid owner, string name, string description, decimal initialBalance, Currency currency )
         {
             Id = id;
             Owner = owner;
@@ -44,38 +44,38 @@ namespace Budgets.BusinessLayer.Entities
             _categories = new();
             _transactions = new();
         }
-        public Wallet(Guid owner, string name, string description, double initialBalance, Currency currency):
+        public Wallet(Guid owner, string name, string description, decimal initialBalance, Currency currency):
             this(Guid.NewGuid(), owner, name, description, initialBalance, currency)
         {}
 
 
         [JsonIgnore]
-        public double Balance
+        public decimal Balance
         {
             get {
-                double sum = InitialBalance;
+                decimal sum = InitialBalance;
                 foreach(Transaction t in _transactions)
                 {
-                     sum += Convertor.convert(t.Sum, t.Currency, _currency);
+                     sum += CurrencyConvertor.convert(t.Sum, t.Currency, _currency);
                 }
 
                 return sum;
             }
         }
         [JsonIgnore]
-        public double MonthLoss
+        public decimal MonthLoss
         {
             get
             {
                 DateTime nowD = DateTime.Now;
-                double sum = 0;
+                decimal sum = 0;
                 TimeSpan ts;
                 foreach (Transaction t in _transactions)
                 {
                     ts = nowD.Subtract(t.Date);
                     if(t.Sum < 0 & ts.TotalDays < 32)
                     {
-                        sum -= Convertor.convert(t.Sum, t.Currency, _currency);
+                        sum -= CurrencyConvertor.convert(t.Sum, t.Currency, _currency);
                     }
                 }
 
@@ -83,19 +83,19 @@ namespace Budgets.BusinessLayer.Entities
             }
         }
         [JsonIgnore]
-        public double MonthProfit
+        public decimal MonthProfit
         {
             get
             {
                 DateTime nowD = DateTime.Now;
-                double sum = 0;
+                decimal sum = 0;
                 TimeSpan ts;
                 foreach (Transaction t in _transactions)
                 {
                     ts = nowD.Subtract(t.Date);
                     if (t.Sum > 0 & ts.TotalDays < 32)
                     {
-                        sum += Convertor.convert(t.Sum, t.Currency, _currency);
+                        sum += CurrencyConvertor.convert(t.Sum, t.Currency, _currency);
                     }
                 }
 

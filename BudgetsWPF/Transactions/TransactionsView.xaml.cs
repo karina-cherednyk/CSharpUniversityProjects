@@ -13,12 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BudgetsWPF.Wallets
+namespace BudgetsWPF.Transactions
 {
-
-    public partial class WalletDetailsView : UserControl
+    /// <summary>
+    /// Interaction logic for TransactionsView.xaml
+    /// </summary>
+    public partial class TransactionsView : UserControl
     {
-        public WalletDetailsView()
+        public TransactionsView()
         {
             InitializeComponent();
         }

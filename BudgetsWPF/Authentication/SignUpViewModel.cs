@@ -3,13 +3,13 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
+using BugetsStorage.Services;
 using Prism.Commands;
 
 namespace BudgetsWPF.Authentication
 {
     internal class SignUpViewModel: INotifyPropertyChanged
     {
-        private readonly AuthenticationService _authService = new AuthenticationService();
         private readonly Action _goToSignIn;
         private readonly Action<User> _goToWallets;
         private readonly AuthUser _regUser = new AuthUser();
@@ -31,7 +31,8 @@ namespace BudgetsWPF.Authentication
         {
            try
             {
-                var user = await _authService.RegisterUserAsync(_regUser);
+                var user = await AuthUserService.RegisterUserAsync(_regUser);
+                MessageBox.Show($"User {_regUser.Login} succesfully registered");
                 _goToWallets.Invoke(user);
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ namespace Budgets.BusinessLayer.Entities
     {
         [JsonIgnore]
         public User User { get; set;  }
-        public double Sum { get; set; }
+        public decimal Sum { get; set; }
         public DateTime Date { get; set; }
         public List<string> Files { get; private set; }
         public string Description { get; set; }
@@ -19,13 +19,13 @@ namespace Budgets.BusinessLayer.Entities
         public Category Category { get; set; }
 
         [JsonConstructor]
-        public Transaction(Guid id,  DateTime date, double sum, Currency currency, Category category, string description, List<string> files):
+        public Transaction(Guid id,  DateTime date, decimal sum, Currency currency, Category category, string description, List<string> files):
         this(id, null, sum, currency, category, description, files )
         {
             Date = date;
         }
 
-        public Transaction(Guid id, User user, double sum, Currency cur, Category cat, string desc, List<string> files)
+        public Transaction(Guid id, User user, decimal sum, Currency cur, Category cat, string desc, List<string> files)
         {
             Id = id;
             User = user;
@@ -37,7 +37,7 @@ namespace Budgets.BusinessLayer.Entities
             Date = DateTime.Now;
             Files = new();
         }
-        public Transaction(User user, double sum, Currency cur, Category cat, string desc) :
+        public Transaction(User user, decimal sum, Currency cur, Category cat, string desc) :
             this(Guid.NewGuid(), user, sum, cur, cat, desc, new List<string>())
         {}
 

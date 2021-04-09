@@ -4,14 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BudgetsWPF"
-        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
-    <Grid Background="#ffdadada">
-        <Border MinWidth="400" Margin="15,126,15,83" 
+        mc:Ignorable="d"
+        Title="MainWindow" MinHeight="600" Width="900" Background="#ffdadada">
+    <Grid >
+        <Border MinWidth="600" MaxWidth="800" Margin="15,126,15,83" 
                 Background="White" VerticalAlignment="Center" 
-                Padding="30" MaxWidth="550" CornerRadius="20" Height="360" >
+                Padding="30"  CornerRadius="20" MinHeight="500" MaxHeight="1000" >
             <Border.Effect>
-                <DropShadowEffect BlurRadius="30" Color="LightBlue" ShadowDepth="1" />
+                <DropShadowEffect BlurRadius="30" Color="Gray" ShadowDepth="1" />
             </Border.Effect>
             <local:MainView/>
         </Border>

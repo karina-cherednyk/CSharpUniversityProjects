@@ -1,26 +1,72 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using Budgets.BusinessLayer.Entities;
+using Budgets.Common;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace BudgetsWPF.Wallets
 {
     class WalletsViewModel: BindableBase
     {
-        private readonly WalletService _walletService;
         private WalletDetailsViewModel _currentWallet;
+        private readonly Action _goToSignIn;
+
         public ObservableCollection<WalletDetailsViewModel> Wallets { get; set; }
+        private User _user;
+
+        public DelegateCommand SignInCommand { get; }
+        public DelegateCommand AddWalletCommand { get; }
 
 
-
-
-        public WalletsViewModel()
+        public WalletsViewModel( User user, Action goToSignIn)
         {
-            _walletService = new WalletService();
+            _user = user;
+            _goToSignIn = goToSignIn;
+
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
-            foreach (var wallet in _walletService.GetWallets())
+            SignInCommand = new DelegateCommand(_goToSignIn);
+            AddWalletCommand = new DelegateCommand(AddWallet);
+
+            foreach (var wallet in _user.Wallets)
             {
-                Wallets.Add(new WalletDetailsViewModel(wallet));
+                Wallets.Add(new WalletDetailsViewModel(wallet, RemoveWallet));
             }
         }
+        public void RemoveWallet(WalletDetailsViewModel wd)
+        {
+            _user.RemoveWallet(wd.Wallet);
+            Wallets.Remove(wd);
+            RaisePropertyChanged(nameof(CurrentWallet));
+            RaisePropertyChanged(nameof(Wallets));
+        }
+
+        public string Name
+        {
+            get
+            {
+                return _user.FirstName;
+            }
+            set
+            {
+                _user.FirstName = value;
+                RaisePropertyChanged();
+            }
+        }
+        
+        public string Surname
+        {
+            get
+            {
+                return _user.LastName;
+            }
+            set
+            {
+                _user.LastName = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         public WalletDetailsViewModel CurrentWallet
         {
@@ -35,5 +81,12 @@ namespace BudgetsWPF.Wallets
             }
         }
 
+        public void AddWallet()
+        {
+            Wallet w = new Wallet(_user.Id, "New wallet", "Some wallet", 0, Currency.UAH);
+            _user.AddWallet(w);
+            Wallets.Add(new WalletDetailsViewModel(w, RemoveWallet));
+            RaisePropertyChanged(nameof(Wallets));
+        }
     }
 }

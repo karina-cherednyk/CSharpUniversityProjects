@@ -6,4 +6,5 @@ namespace Budgets.Common
         EUR,
         USD
     }
+
 }

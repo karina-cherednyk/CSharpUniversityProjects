@@ -14,10 +14,11 @@ namespace BugetsStorage.Services
         public static async Task FillWallets(User u)
         {
             List<Guid> wts = (await _links.GetAsync(u)).ToList();
-            wts.ForEach(async id => {
-                var wal = await Get(id);
+            for(var i=0; i<wts.Count; ++i)
+            {
+                var wal = await Get(wts[i]);
                 u.AddWallet(wal);
-            });
+            }
 
         }
 

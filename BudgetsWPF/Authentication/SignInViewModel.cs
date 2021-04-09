@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
+using BugetsStorage.Services;
 using Prism.Commands;
 
 namespace BudgetsWPF.Authentication
@@ -10,7 +11,6 @@ namespace BudgetsWPF.Authentication
     public class SignInViewModel : INotifyPropertyChanged
     {
 
-        private readonly AuthenticationService _authService = new AuthenticationService();
         private readonly Action _goToSignUp;
         private readonly Action<User> _goToWallets;
 
@@ -44,7 +44,7 @@ namespace BudgetsWPF.Authentication
             {
                 try
                 {
-                    var user = await _authService.AuthenticateAsync(_authUser);
+                    var user = await AuthUserService.AuthenticateAsync(_authUser);
                     _goToWallets.Invoke(user);
                 }
                 catch(Exception ex)

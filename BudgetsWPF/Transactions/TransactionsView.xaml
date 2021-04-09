@@ -6,7 +6,57 @@
              xmlns:local="clr-namespace:BudgetsWPF.Transactions"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <UserControl.Resources>
+        <DataTemplate DataType="{ x:Type local:TransactionDetailsViewModel}">
+            <local:TransactionDetailsView/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid  Background="White" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="150"/>
+            <ColumnDefinition Width="*" MinWidth="150"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="6*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock      MaxWidth="120"
+                        Text="Your Transactions" />
+
+
+
+        <!--Menu-->
+        <ListView   Grid.ColumnSpan="3" 
+                    Grid.Row="2"
+                    ItemsSource="{Binding Transactions}" 
+                    DisplayMemberPath="DisplayName" 
+                    SelectedItem="{Binding CurrentTransaction}"/>
+
+        <GridSplitter   Width="3"
+                        Grid.Column="3" 
+                        Grid.Row="2"
+                        HorizontalAlignment="Stretch"/>
+        <!--Content-->
+        <ContentControl Grid.Column="4" 
+                        Grid.Row="2"
+                        Content="{Binding CurrentTransaction}"/>
+
+        <Button Grid.Column="0"
+                Grid.Row="3"
+                MaxWidth="120"
+                Content="Add new transaction" 
+                Command="{Binding AddTransactionCommand}"/>
+
+        <Button Grid.Column="1"
+                Grid.Row="3"
+                MaxWidth="120"
+                Content="Go to Wallets" 
+                Command="{Binding ToWalletsCommand}"/>
     </Grid>
 </UserControl>

@@ -1,28 +1,20 @@
-﻿using System;
+﻿using Budgets.BusinessLayer.Entities;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace BudgetsWPF.Transactions
 {
-    /// <summary>
-    /// Interaction logic for TransactionsView.xaml
-    /// </summary>
+
     public partial class TransactionsView : UserControl
     {
-        public TransactionsView()
+        private TransactionsViewModel _viewModel;
+        public TransactionsView(User user, Wallet wallet, Action goToWallets)
         {
             InitializeComponent();
+            _viewModel = new TransactionsViewModel(user, wallet, goToWallets);
+            DataContext = _viewModel;
         }
     }
 }

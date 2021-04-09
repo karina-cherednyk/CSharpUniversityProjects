@@ -6,7 +6,59 @@
              xmlns:local="clr-namespace:BudgetsWPF.Transactions"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" >
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Transaction owner"
+                       />
+            <TextBlock MinWidth="300" Margin="10" 
+                     HorizontalAlignment="Stretch" 
+                     Text="{Binding User}"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1" >
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Transaction sum"
+                       />
+            <TextBlock MinWidth="300" Margin="10" 
+                     HorizontalAlignment="Stretch" 
+                     Text="{Binding Sum}"
+                     LostFocus="{Binding SetSum}"
+                     />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" >
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Transaction date"
+                       />
+            <DatePicker SelectedDate="{Binding StartDate}" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" >
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Transaction description"
+                       />
+            <TextBlock MinWidth="300" Margin="10" 
+                     HorizontalAlignment="Stretch" 
+                     Text="{Binding Description}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Transaction currency"
+                       />
+            <ComboBox 
+                      IsSynchronizedWithCurrentItem="True"
+                      ItemsSource="{ Binding Currencies }"
+                      SelectedItem="{Binding SelectedCurrency}"
+                      Margin="10, 10, 10, 0"/>
+        </StackPanel>
     </Grid>
 </UserControl>

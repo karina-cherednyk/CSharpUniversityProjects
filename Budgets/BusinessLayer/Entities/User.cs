@@ -9,6 +9,11 @@ namespace Budgets.BusinessLayer.Entities
     {
         public string LastName { get; set; }
         public string FirstName { get; set; }
+        [JsonIgnore]
+        public string FullName {  get
+            {
+                return FirstName + " " + LastName;
+            } }
         public string Email { get; set; }
 
         [JsonIgnore]

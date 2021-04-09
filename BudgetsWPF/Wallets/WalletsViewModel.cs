@@ -19,7 +19,7 @@ namespace BudgetsWPF.Wallets
         public DelegateCommand AddWalletCommand { get; }
 
 
-        public WalletsViewModel( User user, Action goToSignIn)
+        public WalletsViewModel( User user, Action goToSignIn, Action<User, Wallet> goToTransactions)
         {
             _user = user;
             _goToSignIn = goToSignIn;
@@ -30,7 +30,7 @@ namespace BudgetsWPF.Wallets
 
             foreach (var wallet in _user.Wallets)
             {
-                Wallets.Add(new WalletDetailsViewModel(wallet, RemoveWallet));
+                Wallets.Add(new WalletDetailsViewModel(user, wallet, RemoveWallet, goToTransactions));
             }
         }
         public void RemoveWallet(WalletDetailsViewModel wd)

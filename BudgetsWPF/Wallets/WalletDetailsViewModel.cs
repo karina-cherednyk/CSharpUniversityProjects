@@ -21,13 +21,13 @@ namespace BudgetsWPF.Wallets
         public DelegateCommand RemoveWalletCommand { get; }
         public DelegateCommand ShowTransactionsCommand { get; }
 
-        public WalletDetailsViewModel(Wallet wallet, Action<WalletDetailsViewModel> removeWallet)
+        public WalletDetailsViewModel(User user,  Wallet wallet, Action<WalletDetailsViewModel> removeWallet, Action<User, Wallet> goToTransactions)
         {
             Wallet = wallet;
             Categories = new(wallet.Categories);
             _selectedCurrency = CurrencyConvertor.CurencyToString(Wallet.Currency);
             RemoveWalletCommand = new DelegateCommand( () => removeWallet(this));
-
+            ShowTransactionsCommand = new DelegateCommand(() => goToTransactions(user, Wallet));
         }
 
 

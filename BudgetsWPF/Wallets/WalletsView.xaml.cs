@@ -9,10 +9,10 @@ namespace BudgetsWPF.Wallets
     {
 
         private WalletsViewModel _viewModel;
-        public WalletsView(User user, Action goToSignInView)
+        public WalletsView(User user, Action goToSignInView, Action<User, Wallet> goToTransactionsView)
         {
             InitializeComponent();
-            _viewModel = new WalletsViewModel(user, goToSignInView);
+            _viewModel = new WalletsViewModel(user, goToSignInView, goToTransactionsView);
             DataContext = _viewModel;
         }
     }

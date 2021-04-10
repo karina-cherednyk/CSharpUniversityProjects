@@ -13,14 +13,16 @@ namespace BudgetsStorage.Services
         {
             //Thread.Sleep(2000);
             var signInUser = signUpUser.NewSignInUser();
+            signInUser.EncryptPassword();
 
             var all = await All;
             var users = all.Values.ToList();
-            var dbUser = users.FirstOrDefault(user => user.Login == signInUser.Login);
+            var dbUser = users.FirstOrDefault(user => signInUser.Equals(user));
 
             if (dbUser != null)
                 throw new Exception("User already exists");
-            if (string.IsNullOrWhiteSpace(signInUser.Login) || String.IsNullOrWhiteSpace(signInUser.Password) || String.IsNullOrWhiteSpace(signInUser.Email))
+
+            if (string.IsNullOrWhiteSpace(signInUser.Login) || string.IsNullOrWhiteSpace(signInUser.Password) || string.IsNullOrWhiteSpace(signInUser.Email))
                 throw new ArgumentException("Login, Password or Last Name is Empty");
 
 
@@ -34,16 +36,18 @@ namespace BudgetsStorage.Services
             return dataUser;
         }
 
-        public static async Task<User> AuthenticateAsync(SignInUser authUser)
+        public static async Task<User> AuthenticateAsync(SignInUser signInUser)
         {
             //Thread.Sleep(2000);
-            if (String.IsNullOrWhiteSpace(authUser.Login) || String.IsNullOrWhiteSpace(authUser.Password))
+            if (string.IsNullOrWhiteSpace(signInUser.Login) || string.IsNullOrWhiteSpace(signInUser.Password))
                 throw new ArgumentException("Login or Password is Empty");
-            
+
+            signInUser.EncryptPassword();
+
             var all = await All;
             var users = all.Values.ToList();
 
-            var dbUser = users.FirstOrDefault(user => user.Login == authUser.Login && user.Password == authUser.Password);
+            var dbUser = users.FirstOrDefault(user => signInUser.Equals(user));
             if (dbUser == null)
                 throw new Exception("Wrong Login or Password");
 

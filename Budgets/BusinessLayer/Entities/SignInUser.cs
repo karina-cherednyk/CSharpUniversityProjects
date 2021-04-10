@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budgets.Common;
+using System;
 using System.Text.Json.Serialization;
 
 namespace Budgets.BusinessLayer.Entities
@@ -14,23 +15,35 @@ namespace Budgets.BusinessLayer.Entities
         [JsonConstructor]
         public SignInUser(Guid guid, string login, string email, string password)
         {
-            this.Login = login;
-            this.Email = email;
-            this.Password = password;
-            this.Guid = guid;
+            Login = login;
+            Email = email;
+            Password = password;
+            Guid = guid;
         }
         public SignInUser(string login, string email, string password)
-        {
-            this.Login = login;
-            this.Email = email;
-            this.Password = password;
-            this.Guid = Guid.NewGuid();
-        }
+            :this(Guid.NewGuid(), login, email, password)
+        {}
         public SignInUser()
         {
             this.Guid = Guid.NewGuid();
         }
 
+        public void EncryptPassword()
+        {
+            Password = Encryptor.Encrypt(Password);
+        }
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                SignInUser u = (SignInUser)obj;
+                return u.Login == Login && u.Password == Password;
+            }
+        }
 
     }
 }

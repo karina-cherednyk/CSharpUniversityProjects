@@ -25,7 +25,16 @@
                      HorizontalAlignment="Stretch" 
                      Text="{Binding User}"/>
         </StackPanel>
-        
+        <StackPanel Grid.Column="1" >
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Transaction category:"/>
+            <ComboBox 
+                      IsSynchronizedWithCurrentItem="True"
+                      DisplayMemberPath="Name"
+                      ItemsSource="{ Binding Categories }"
+                      SelectedItem="{Binding SelectedCategory}"
+                      Margin="10, 10, 10, 0"/>
+        </StackPanel>
         <StackPanel Grid.Row="1" >
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Transaction sum"
@@ -60,5 +69,19 @@
                       SelectedItem="{Binding SelectedCurrency}"
                       Margin="10, 10, 10, 0"/>
         </StackPanel>
+        <Button 
+            Margin="10 0"
+            Grid.Row="4" Grid.Column="0"
+            Content="Save Transaction" 
+            Command="{Binding SaveTransactionCommand}"
+            />
+
+        <Button 
+            Margin="10 0"
+            Grid.Row="4" Grid.Column="1"
+            Content="Save Transaction" 
+            Command="{Binding DeleteTransactionCommand}"
+            />
+        
     </Grid>
 </UserControl>

@@ -20,6 +20,7 @@ namespace BudgetsWPF.Wallets
         private string _selectedCurrency;
         public DelegateCommand RemoveWalletCommand { get; }
         public DelegateCommand ShowTransactionsCommand { get; }
+        public DelegateCommand SaveWalletCommand { get;  }
 
         public WalletDetailsViewModel(User user,  Wallet wallet, Action<WalletDetailsViewModel> removeWallet, Action<User, Wallet> goToTransactions)
         {
@@ -28,6 +29,7 @@ namespace BudgetsWPF.Wallets
             _selectedCurrency = CurrencyConvertor.CurencyToString(Wallet.Currency);
             RemoveWalletCommand = new DelegateCommand( () => removeWallet(this));
             ShowTransactionsCommand = new DelegateCommand(() => goToTransactions(user, Wallet));
+            SaveWalletCommand = new DelegateCommand(async () => { });
         }
 
 

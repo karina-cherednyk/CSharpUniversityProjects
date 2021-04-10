@@ -1,20 +1,29 @@
 ﻿
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BudgetsWPF.Transactions
 {
     public class TransactionDetailsViewModel : BindableBase
     {
         private Transaction _transaction;
-        public TransactionDetailsViewModel(Transaction transaction)
+        private Wallet _wallet;
+        public DelegateCommand SaveTransactionCommand { get; }
+
+        public TransactionDetailsViewModel(Wallet wallet, Transaction transaction)
         {
             _transaction = transaction;
+            _wallet = wallet;
             _sum = _transaction.Sum.ToString("F");
             _selectedCurrency = CurrencyConvertor.CurencyToString(_transaction.Currency);
+            
+            // TODO
+            SaveTransactionCommand = new DelegateCommand(() => { });
         }
 
         public string User => _transaction.User.FullName;
@@ -35,10 +44,25 @@ namespace BudgetsWPF.Transactions
             }
         }
 
+        public Category SelectedCategory
+        {
+            get
+            {
+                return _transaction.Category;
+            }
+            set
+            {
+                _transaction.Category = value;
+            }
+        }
+
+        public List<Category> Categories => _wallet.Categories.ToList();
+
+
         public void SetSum()
         {
-            Decimal value;
-            if (Decimal.TryParse(_sum, out value))
+            decimal value;
+            if (decimal.TryParse(_sum, out value))
             {
                 Sum = value.ToString("F");
                 _transaction.Sum = value;

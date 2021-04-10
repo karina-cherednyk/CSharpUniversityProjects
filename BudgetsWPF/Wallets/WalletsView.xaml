@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetsWPF.Wallets"
              mc:Ignorable="d" 
+             Width="600" Height="400"
              >
     <UserControl.Resources>
         <DataTemplate DataType="{ x:Type local:WalletDetailsViewModel}">
@@ -17,7 +18,7 @@
                 <ColumnDefinition Width="*" MinWidth="150"/>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="6*" MinWidth="150"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -63,7 +64,13 @@
                 MaxWidth="120"
                 Content="Go to Sign In" 
                 Command="{Binding SignInCommand}"/>
-        </Grid>
+
+        <Button Grid.Column="4"
+                Grid.Row="3"
+                MaxWidth="120"
+                Content="Show categories" 
+                Command="{Binding GoToCategoriesCommand}"/>
+    </Grid>
         
 
 </UserControl>

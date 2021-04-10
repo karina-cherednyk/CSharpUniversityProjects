@@ -2,6 +2,7 @@
 using Budgets.BusinessLayer.Entities;
 using BudgetsWPF.Authentication;
 using BudgetsWPF.Transactions;
+using BudgetsWPF.Categories;
 using BudgetsWPF.Wallets;
 
 namespace BudgetsWPF
@@ -28,7 +29,11 @@ namespace BudgetsWPF
 
         public void GoToWalletsView(User user)
         {
-            Content = new WalletsView(user, GoToSignInView, GoToTransactionsView);
+            Content = new WalletsView(user, GoToSignInView, GoToTransactionsView, GoToCategoriesView);
+        }
+        public void GoToCategoriesView(User user)
+        {
+            Content = new CategoriesView(user, GoToWalletsView);
         }
  
     }

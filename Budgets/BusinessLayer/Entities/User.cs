@@ -35,6 +35,10 @@ namespace Budgets.BusinessLayer.Entities
             _wallets = new();
         }
 
+        public void RemoveCategory(object category)
+        {
+            throw new NotImplementedException();
+        }
 
         public bool HasWallet(Wallet w) => _wallets.Contains(w);
         public bool AddCategory(Category category) => _categories.Add(category);

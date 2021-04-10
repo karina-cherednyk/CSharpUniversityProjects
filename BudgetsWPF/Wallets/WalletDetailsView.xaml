@@ -73,8 +73,6 @@
             <TextBlock MinWidth="300" Margin="10" 
                      HorizontalAlignment="Stretch" 
                      Text="{Binding MonthLoss}"/>
-        </StackPanel>
-        <StackPanel Grid.Row="3" Grid.Column="1">
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Month Profit"/>
             <TextBlock MinWidth="300" Margin="10" 
@@ -83,9 +81,15 @@
         </StackPanel>
         <Button 
             Margin="10 0"
-            Grid.Row="4" Grid.Column="0"
+            Grid.Row="3" Grid.Column="1"
             Content="Show Transactions" 
             Command="{Binding ShowTransactionsCommand}"
+            />
+        <Button 
+            Margin="10 0"
+            Grid.Row="4" Grid.Column="0"
+            Content="Save wallet" 
+            Command="{Binding SaveWalletCommand}"
             />
         <Button 
             Margin="10 0"

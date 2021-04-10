@@ -1,14 +1,16 @@
-﻿<UserControl x:Class="BudgetsWPF.Transactions.TransactionsView"
+﻿<UserControl x:Class="BudgetsWPF.Categories.CategoriesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:BudgetsWPF.Transactions"
+             xmlns:local="clr-namespace:BudgetsWPF.Categories"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="white"
+             >
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type local:TransactionDetailsViewModel}">
-            <local:TransactionDetailsView></local:TransactionDetailsView>
+        <DataTemplate DataType="{ x:Type local:CategoryDetailsViewModel}">
+            <local:CategoryDetailsView ></local:CategoryDetailsView>
         </DataTemplate>
     </UserControl.Resources>
     <Grid  Background="White" >
@@ -27,13 +29,14 @@
         </Grid.RowDefinitions>
 
         <TextBlock      MaxWidth="120"
-                        Text="Your Transactions" />
+                        Text="Welcome" />
+
         <!--Menu-->
         <ListView   Grid.ColumnSpan="3" 
                     Grid.Row="2"
-                    ItemsSource="{Binding Transactions}" 
+                    ItemsSource="{Binding Categories}" 
                     DisplayMemberPath="DisplayName" 
-                    SelectedItem="{Binding CurrentTransaction}"/>
+                    SelectedItem="{Binding CurrentCategory}"/>
 
         <GridSplitter   Width="3"
                         Grid.Column="3" 
@@ -42,18 +45,18 @@
         <!--Content-->
         <ContentControl Grid.Column="4" 
                         Grid.Row="2"
-                        Content="{Binding CurrentTransaction}"/>
+                        Content="{Binding CurrentCategory}"/>
 
         <Button Grid.Column="0"
                 Grid.Row="3"
                 MaxWidth="120"
-                Content="Add new transaction" 
-                Command="{Binding AddTransactionCommand}"/>
+                Content="Add new wallet" 
+                Command="{Binding AddCategoryCommand}"/>
 
         <Button Grid.Column="1"
                 Grid.Row="3"
                 MaxWidth="120"
-                Content="Go to Wallets" 
-                Command="{Binding ToWalletsCommand}"/>
+                Content="Go to Sign In" 
+                Command="{Binding GoToWalletsCommand}"/>
     </Grid>
 </UserControl>

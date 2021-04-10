@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
-using BugetsStorage.Services;
+using BudgetsStorage.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 

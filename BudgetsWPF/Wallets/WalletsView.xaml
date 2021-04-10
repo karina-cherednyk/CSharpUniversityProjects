@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetsWPF.Wallets"
              mc:Ignorable="d" 
-             Width="600" Height="400"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Height="400"
              >
     <UserControl.Resources>
         <DataTemplate DataType="{ x:Type local:WalletDetailsViewModel}">
@@ -18,7 +19,7 @@
                 <ColumnDefinition Width="*" MinWidth="150"/>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="6*" MinWidth="150"/>
+                <ColumnDefinition Width="6*" MinWidth="400"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -28,13 +29,15 @@
         </Grid.RowDefinitions>
         
         <TextBlock      MaxWidth="120"
-                        Text="Welcome" />
+                        Text="Welcome, " FontSize="16" FontWeight="Bold" />
 
         <TextBox        Grid.Row="1" MaxWidth="120"
+                        md:HintAssist.Hint="Enter your first name"
                         Text="{Binding Name}"  />
 
         <TextBox        Grid.Row="1" MaxWidth="120"
                         Grid.Column="1"
+                        md:HintAssist.Hint="Enter your last name"
                         Text="{Binding Surname}" />
         
         <!--Menu-->
@@ -53,23 +56,29 @@
                         Grid.Row="2"
                         Content="{Binding CurrentWallet}"/>
 
-        <Button Grid.Column="0"
-                Grid.Row="3"
-                MaxWidth="120"
-                Content="Add new wallet" 
-                Command="{Binding AddWalletCommand}"/>
+
             
         <Button Grid.Column="1"
                 Grid.Row="3"
-                MaxWidth="120"
+                MaxWidth="140"
                 Content="Go to Sign In" 
+                Style="{StaticResource MaterialDesignFlatButton}"
                 Command="{Binding SignInCommand}"/>
+
+        <Button Grid.Column="0"
+                Grid.Row="3"
+                MaxWidth="140"
+                Content="Show categories" 
+                Style="{StaticResource MaterialDesignFlatButton}"
+                Command="{Binding GoToCategoriesCommand}"/>
 
         <Button Grid.Column="4"
                 Grid.Row="3"
-                MaxWidth="120"
-                Content="Show categories" 
-                Command="{Binding GoToCategoriesCommand}"/>
+                MaxWidth="140"
+                Content="Add new wallet" 
+                HorizontalAlignment="Right"
+                Margin="0 0 10 0"
+                Command="{Binding AddWalletCommand}"/>
     </Grid>
         
 

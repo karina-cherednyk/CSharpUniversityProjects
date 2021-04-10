@@ -1,6 +1,6 @@
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
-using BugetsStorage.Services;
+using BudgetsStorage.Services;
 using System;
 using System.Linq;
 using Xunit;
@@ -15,10 +15,7 @@ namespace BudgetsStorage.Test
             UserService _userService = new();
 
 
-            AuthUser userAuth = new("john", "john@gmail.com", "pass");
-            var user = userAuth.NewUser();
-            user.FirstName = "John";
-            user.LastName = "Johnson";
+            var user = new User(Guid.NewGuid(), "John", "Johnson", "john");
 
             await UserService.Add(user);
             var user2 = await UserService.Get(user.Id);
@@ -27,11 +24,8 @@ namespace BudgetsStorage.Test
         [Fact]
         public async void Test2()
         {
-  
-            AuthUser userAuth = new("john", "john@gmail.com", "pass");
-            var user = userAuth.NewUser();
-            user.FirstName = "John";
-            user.LastName = "Johnson";
+
+            var user = new User(Guid.NewGuid(), "John", "Johnson", "john");
 
             user.AddWallet(new Wallet(user.Id, "Wallet", "Desc", 0, Currency.UAH));
 
@@ -44,10 +38,7 @@ namespace BudgetsStorage.Test
         {
 
 
-            AuthUser userAuth = new("john", "john@gmail.com", "pass");
-            var user = userAuth.NewUser();
-            user.FirstName = "John";
-            user.LastName = "Johnson";
+            var user = new User(Guid.NewGuid(), "John", "Johnson", "john");
 
             var cat = new Category("a", "b");
             user.AddCategory(cat);
@@ -67,13 +58,6 @@ namespace BudgetsStorage.Test
            
 
         }
-        [Fact]
-        public async void Test4()
-        {
-            AuthUser userAuth = new("john", "john@gmail.com", "pass");
-            await AuthUserService.RegisterUserAsync(userAuth);
-            var user2 = await AuthUserService.AuthenticateAsync(userAuth);
-            var a = 3;
-        }
+
     }
 }

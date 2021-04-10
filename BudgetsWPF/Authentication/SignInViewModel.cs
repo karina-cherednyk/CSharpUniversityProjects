@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
-using BugetsStorage.Services;
+using BudgetsStorage.Services;
 using Prism.Commands;
 
 namespace BudgetsWPF.Authentication
@@ -62,7 +62,7 @@ namespace BudgetsWPF.Authentication
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private AuthUser _authUser = new AuthUser();
+        private SignInUser _authUser = new SignInUser();
         public string Login
         {
             get

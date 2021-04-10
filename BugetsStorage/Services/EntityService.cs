@@ -1,11 +1,10 @@
 ﻿using Budgets.BusinessLayer.Entities;
-using BugetsStorage;
 using NuGet.Common;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BudgetsWPF.Services
+namespace BudgetsStorage.Services
 {
     public abstract class EntityService<T> where T : class, IStorable
     {

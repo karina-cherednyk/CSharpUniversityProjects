@@ -3,7 +3,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
-using BugetsStorage.Services;
+using Budgets.Common;
+using BudgetsStorage.Services;
 using Prism.Commands;
 
 namespace BudgetsWPF.Authentication
@@ -12,7 +13,7 @@ namespace BudgetsWPF.Authentication
     {
         private readonly Action _goToSignIn;
         private readonly Action<User> _goToWallets;
-        private readonly AuthUser _regUser = new AuthUser();
+        private readonly SignUpUser _regUser = new SignUpUser();
 
         public DelegateCommand SignUpCommand { get; }
         public DelegateCommand SignInCommand { get; }
@@ -46,7 +47,9 @@ namespace BudgetsWPF.Authentication
             return
                 !string.IsNullOrWhiteSpace(Login) &&
                 !string.IsNullOrWhiteSpace(Password) &&
-                !string.IsNullOrWhiteSpace(Email) &&
+                !string.IsNullOrWhiteSpace(FirstName) &&
+                !string.IsNullOrWhiteSpace(LastName) &&
+                Validator.ValidateEmail(Email) &&
                 Password2 == Password;
         }
 
@@ -63,6 +66,34 @@ namespace BudgetsWPF.Authentication
                 }
             }
         }
+        public string FirstName
+        {
+            get { return _regUser.FirstName;  }
+            set
+            {
+                if (_regUser.FirstName != value)
+                {
+                    _regUser.FirstName = value;
+                    OnPropertyChanged();
+                    SignUpCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public string LastName
+        {
+            get { return _regUser.LastName;  }
+            set
+            {
+                if(_regUser.LastName != value)
+                {
+                    _regUser.LastName = value;
+                    OnPropertyChanged();
+                    SignUpCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
         public string Password
         {
             get { return _regUser.Password; }

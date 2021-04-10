@@ -21,6 +21,11 @@ namespace Budgets.BusinessLayer.Entities
                 return Validate();
             }
         }
+        [JsonIgnore]
+        public bool IsNew { get; set; }
+
+        [JsonIgnore]
+        public bool HasChanges { get; set; }
 
         [JsonIgnore]
         public Guid Guid => Id;

@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="white"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              >
     <UserControl.Resources>
         <DataTemplate DataType="{ x:Type local:CategoryDetailsViewModel}">
@@ -29,7 +30,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock      MaxWidth="120"
-                        Text="Welcome" />
+                        Text="Your categories:" FontSize="16" FontWeight="Bold" />
 
         <!--Menu-->
         <ListView   Grid.ColumnSpan="3" 
@@ -49,14 +50,15 @@
 
         <Button Grid.Column="0"
                 Grid.Row="3"
-                MaxWidth="120"
-                Content="Add new wallet" 
+                Width="140"
+                Content="Add category" 
                 Command="{Binding AddCategoryCommand}"/>
 
         <Button Grid.Column="1"
                 Grid.Row="3"
-                MaxWidth="120"
+                Width="140"
                 Content="Go to Sign In" 
+                Style="{StaticResource MaterialDesignFlatButton}" 
                 Command="{Binding GoToWalletsCommand}"/>
     </Grid>
 </UserControl>

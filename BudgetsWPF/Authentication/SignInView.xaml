@@ -18,10 +18,13 @@
 
         <TextBox 
                  md:HintAssist.Hint="Enter login" 
-                 Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="0 5"
+            />
         <PasswordBox x:Name="Password" 
                      md:HintAssist.Hint="Enter password"
                      PasswordChanged="OnPasswordChanged"   
+                     Margin="0 5"
                      />
 
         <Button Content="Sign in" Margin="0 20"

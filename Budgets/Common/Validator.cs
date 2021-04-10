@@ -15,21 +15,21 @@ namespace Budgets.Common
         
         public static bool ValidateEmail(string email)
         {
-            return EmailRegex.IsMatch(email);
+            return !string.IsNullOrWhiteSpace(email) && EmailRegex.IsMatch(email);
         }
 
         public static bool ValidateColor(string color)
         {
-            return ColorRegex.IsMatch(color);
+            return !string.IsNullOrWhiteSpace(color) && ColorRegex.IsMatch(color);
         }
 
         public static bool ValidateIcon(string iconPath)
         {
-            return IconRegex.IsMatch(iconPath);
+            return !string.IsNullOrWhiteSpace(iconPath) && IconRegex.IsMatch(iconPath);
         }
         public static bool ValidateFile(string filePath)
         {
-            return FileRegex.IsMatch(filePath);
+            return !string.IsNullOrWhiteSpace(filePath) && FileRegex.IsMatch(filePath);
         }
     }
 }

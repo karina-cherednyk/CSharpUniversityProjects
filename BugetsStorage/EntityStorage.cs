@@ -5,7 +5,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BugetsStorage
+namespace BudgetsStorage
 {
     public class EntityStorage<T> where T: class, IStorable
     {

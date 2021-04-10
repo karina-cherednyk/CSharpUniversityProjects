@@ -1,11 +1,10 @@
 ﻿using Budgets.BusinessLayer.Entities;
-using BudgetsWPF.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BugetsStorage.Services
+namespace BudgetsStorage.Services
 {
     public class WalletService: EntityService<Wallet>
     {

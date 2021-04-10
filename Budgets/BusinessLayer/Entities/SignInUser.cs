@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Budgets.BusinessLayer.Entities
 {
-    public class AuthUser: IStorable
+    public class SignInUser: IStorable
     {
         public Guid   Guid      { get; }
         public string Email     { get; set; }
@@ -13,29 +12,25 @@ namespace Budgets.BusinessLayer.Entities
 
 
         [JsonConstructor]
-        public AuthUser(Guid guid, string login, string email, string password)
+        public SignInUser(Guid guid, string login, string email, string password)
         {
             this.Login = login;
             this.Email = email;
             this.Password = password;
             this.Guid = guid;
         }
-        public AuthUser(string login, string email, string password)
+        public SignInUser(string login, string email, string password)
         {
             this.Login = login;
             this.Email = email;
             this.Password = password;
             this.Guid = Guid.NewGuid();
         }
-        public AuthUser()
+        public SignInUser()
         {
             this.Guid = Guid.NewGuid();
         }
 
-        public User NewUser()
-        {
-            return new User(Guid, "UserName", "UserLastName", Email);
-        }
 
     }
 }

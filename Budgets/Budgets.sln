@@ -14,9 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetsWPF", "..\BudgetsWPF
 		{8F7478C7-0C91-49D8-A7F6-7FA6CF0F6CF9} = {8F7478C7-0C91-49D8-A7F6-7FA6CF0F6CF9}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BugetsStorage", "..\BugetsStorage\BugetsStorage.csproj", "{E1D35384-3ABC-4161-8042-405A4ADAE922}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetsStorage", "..\BugetsStorage\BudgetsStorage.csproj", "{E1D35384-3ABC-4161-8042-405A4ADAE922}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetsStorage.Test", "..\BudgetsStorage.Test\BudgetsStorage.Test.csproj", "{E1072AFA-5A10-4E48-9F33-BE1148D9E2E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetsStorage.Test", "..\BudgetsStorage.Test\BudgetsStorage.Test.csproj", "{E1072AFA-5A10-4E48-9F33-BE1148D9E2E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BugetsStorage
+namespace BudgetsStorage
 {
     class RelationStorage<T, U>
         where T: class, IStorable
@@ -27,13 +27,13 @@ namespace BugetsStorage
         }
         public async Task AddAsync(T obj, U u)
         {
-
-            using StreamWriter sw = new StreamWriter(FileName(obj), true);
-
             HashSet<Guid> pairs = await GetSetAsync(obj);
+            if (pairs.Contains(u.Guid))
+                return;
+
             pairs.Add(u.Guid);
             string stringObj = JsonSerializer.Serialize(pairs.ToList());
-
+            using StreamWriter sw = new StreamWriter(FileName(obj), false);
             await sw.WriteAsync(stringObj);
         }
         private async Task<HashSet<Guid>> GetSetAsync(T obj) => (await GetAsync(obj)).ToHashSet();
@@ -61,9 +61,7 @@ namespace BugetsStorage
 
             pairs.Remove(u.Guid);
             string stringObj = JsonSerializer.Serialize(pairs.ToList());
-
             using StreamWriter sw = new StreamWriter(FileName(obj), false);
-
             await sw.WriteAsync(stringObj);
 
         }

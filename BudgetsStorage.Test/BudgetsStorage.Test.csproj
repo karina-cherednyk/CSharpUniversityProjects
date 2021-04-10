@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Budgets\Budgets.csproj" />
-    <ProjectReference Include="..\BugetsStorage\BugetsStorage.csproj" />
+    <ProjectReference Include="..\BugetsStorage\BudgetsStorage.csproj" />
   </ItemGroup>
 
 </Project>

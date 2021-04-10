@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
+using BudgetsStorage.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -27,21 +28,23 @@ namespace BudgetsWPF.Wallets
             _user = user;
             _goToSignIn = goToSignIn;
             _goToTransactions = goToTransactions;
+            _goToCategories = goToCategories;
 
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
             SignInCommand = new DelegateCommand(_goToSignIn);
             AddWalletCommand = new DelegateCommand(AddWallet);
-            // GoToCategoriesCommand = new DelegateCommand(goToCategories);
-            GoToCategoriesCommand = new DelegateCommand(ToCategories);
+            
+            GoToCategoriesCommand = new DelegateCommand(GoToCategories);
 
             foreach (var wallet in _user.Wallets)
             {
                 Wallets.Add(new WalletDetailsViewModel(user, wallet, RemoveWallet, _goToTransactions));
             }
         }
-
-        private void ToCategories()
+        public async void GoToCategories()
         {
+            if(_user.Categories.Count == 0) 
+                await CategoryService.FillCategories(_user);
             _goToCategories(_user);
         }
 

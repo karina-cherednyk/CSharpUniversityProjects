@@ -6,10 +6,11 @@ namespace Budgets.BusinessLayer.Entities
 {
     public class Category: BaseEntity
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Color { get; set; }
-        public string Icon { get; set; }
+        private string _name, _description, _color, _icon;
+        public string Name { get { return _name;  } set { _name = value; HasChanges = true; } }
+        public string Description { get { return _description; } set { _description = value; HasChanges = true; } }
+        public string Color { get { return _color; } set { _color = value; HasChanges = true; } }
+        public string Icon { get { return _icon; } set { _icon = value; HasChanges = true; } }
 
         [JsonConstructor]
         public Category(Guid id, string name, string description, string color, string icon)
@@ -19,11 +20,14 @@ namespace Budgets.BusinessLayer.Entities
             Description = description;
             Color = color;
             Icon = icon;
+            HasChanges = false;
         }
 
         public Category(string name, string description, string color, string icon):
             this(Guid.NewGuid(), name, description, color, icon)
-        { }
+        {
+            IsNew = true;
+        }
 
         public Category( string name, string description) :
         this(name, description, null, null)

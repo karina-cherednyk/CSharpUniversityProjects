@@ -17,5 +17,12 @@ namespace BudgetsWPF.Wallets
             Regex regex = new Regex("[0-9\\.]+");
             e.Handled = !regex.IsMatch(e.Text);
         }
+        private void WalletCategories_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            if (CategoriesListBox.SelectedIndex == -1)
+                AddCategoryBtn.Content = "Add category";
+            else AddCategoryBtn.Content = "Remove category";
+            
+        }
     }
 }

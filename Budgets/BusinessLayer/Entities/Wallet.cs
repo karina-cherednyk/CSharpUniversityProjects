@@ -109,8 +109,23 @@ namespace Budgets.BusinessLayer.Entities
             }
         }
         public bool HasCategory(Category category) => _categories.Contains(category);
-        public bool AddCategory(Category category) => _categories.Add(category);
-        public bool RemoveCategory(Category category) => _categories.Remove(category);
+        public bool AddCategory(Category category)
+        {
+            if (_categories.Add(category)){
+                HasChanges = true;
+                return true;
+            }
+            return false;
+        }
+        public bool RemoveCategory(Category category)
+        {
+            if (_categories.Remove(category))
+            {
+                HasChanges = true;
+                return true;
+            }
+            return false;
+        }
         public bool AddTransaction(Transaction transaction)
         {
             if (

@@ -44,7 +44,8 @@ namespace BudgetsWPF.Categories
         public async void SaveCategory() {
             await CategoryService.Add(_category);
             await RelationService<User, Category>.AddConnection(_user, _category);
-            
+            _user.AddCategory(_category);
+
             _category.HasChanges = false;
             _category.IsNew = false;
             RemoveCategoryCommand.RaiseCanExecuteChanged();

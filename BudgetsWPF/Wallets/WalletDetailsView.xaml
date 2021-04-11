@@ -47,9 +47,11 @@
                        Text="Categories"
                        />
             <ListBox 
+                Name="CategoriesListBox"
                 ItemsSource="{Binding Categories}"
-                HorizontalContentAlignment="Stretch">
-                <ListBox.ItemTemplate>
+                HorizontalContentAlignment="Stretch"
+                SelectedItem="{ Binding SelectedWalletCategory}" >
+                <ListBox.ItemTemplate  >
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -60,10 +62,17 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <ComboBox 
+                      IsSynchronizedWithCurrentItem="True"
+                      ItemsSource="{ Binding UserCategories }"
+                      DisplayMemberPath="Name"
+                      SelectedItem="{Binding SelectedUserCategory}"
+                      Margin="10, 10, 10, 0"/>
             <Button Margin="10, 10, 10, 0"
-                    Content="Add New Category"
+                    Name="AddCategoryBtn"
+                    Content="{Binding CategoryBtnText}"
                     Style="{StaticResource MaterialDesignRaisedLightButton}"
-                    Command="{Binding AddCategoryCommand}"
+                    Command="{Binding ToggleCategoryCommand}"
                     />
         </StackPanel>
         <StackPanel Grid.Row="1" >

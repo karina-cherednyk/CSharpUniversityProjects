@@ -45,5 +45,8 @@ namespace Budgets.BusinessLayer.Entities
             }
         }
 
+        [JsonIgnore]
+        public bool HasChanges { get; set; }
+
     }
 }

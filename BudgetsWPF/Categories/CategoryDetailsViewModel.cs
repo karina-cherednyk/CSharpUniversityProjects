@@ -22,14 +22,14 @@ namespace BudgetsWPF.Categories
             _category = category;
             _user = user;
             _removeCategoryFromCategoriesView = removeCategory;
-            RemoveCategoryCommand = new DelegateCommand(RemoveCategory, IsRemoveEnabled);
-            SaveCategoryCommand = new DelegateCommand(SaveCategory, IsSaveEnabled);
+            RemoveCategoryCommand = new DelegateCommand(RemoveCategory, CanRemoveCategory);
+            SaveCategoryCommand = new DelegateCommand(SaveCategory, CanSaveCategory);
         }
 
         public string DisplayName {
             get
             {
-                if (string.IsNullOrWhiteSpace(_category.Name))
+                if (_category.IsNew)
                     return "New category";
                 else return _category.Name;
             }
@@ -52,9 +52,9 @@ namespace BudgetsWPF.Categories
             RaisePropertyChanged(nameof(DisplayName));
         }
 
-        public bool IsSaveEnabled() => _category.HasChanges && _category.IsValid;
+        public bool CanSaveCategory() => _category.HasChanges && _category.IsValid;
 
-        public bool IsRemoveEnabled() => !_category.IsNew;
+        public bool CanRemoveCategory() => !_category.IsNew;
 
         public string Name
         {

@@ -3,11 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Budgets.BusinessLayer.Entities
 {
-    public enum EntityState
-    {
-        Active,
-        Deleted
-    }
+
     public abstract class BaseEntity: IStorable
     {
      

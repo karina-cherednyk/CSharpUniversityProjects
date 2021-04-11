@@ -19,7 +19,7 @@ namespace BudgetsStorage.Services
             {
                 var vals = await _storage.GetAllAsync();
                 Dictionary<Guid, T> map = new();
-                vals.ForEach(x => map.Add(x.Guid, x));
+                vals.ForEach(x => { x.HasChanges = false; map.Add(x.Guid, x); });
                 return map;
             });
         }

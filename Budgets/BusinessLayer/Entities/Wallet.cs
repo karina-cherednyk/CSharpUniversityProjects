@@ -7,11 +7,16 @@ namespace Budgets.BusinessLayer.Entities
 {
 	public class Wallet : BaseEntity, ICategorizable
     {
+        private string _name, _description;
+        private decimal _initBalance;
+        private Currency _currency;
+        private HashSet<Category> _categories;
+        private List<Transaction> _transactions;
 
         public Guid Owner { get;  }
-        public string Name { get; set; }
-        public decimal InitialBalance { get; private set; }
-        public string Description { get; set; }
+        public string Name { get { return _name; } set { _name = value; HasChanges = true; } }
+        public decimal InitialBalance { get { return _initBalance; } set { _initBalance = value; HasChanges = true; } }
+        public string Description { get { return _description; } set { _description = value; HasChanges = true; } }
 
         [JsonIgnore]
         public List<Transaction> Transactions => _transactions;
@@ -19,9 +24,7 @@ namespace Budgets.BusinessLayer.Entities
         public HashSet<Category> Categories => _categories;
 
 
-        private Currency _currency;
-        private HashSet<Category> _categories;
-        private List<Transaction> _transactions;
+
 
         public Currency Currency
         {
@@ -30,6 +33,7 @@ namespace Budgets.BusinessLayer.Entities
             {
                 InitialBalance = CurrencyConvertor.convert(InitialBalance, _currency, value);
                 _currency = value;
+                HasChanges = true;
             }
         }
         [JsonConstructor]
@@ -46,7 +50,9 @@ namespace Budgets.BusinessLayer.Entities
         }
         public Wallet(Guid owner, string name, string description, decimal initialBalance, Currency currency):
             this(Guid.NewGuid(), owner, name, description, initialBalance, currency)
-        {}
+        {
+            IsNew = true;
+        }
 
 
         [JsonIgnore]

@@ -27,7 +27,7 @@ namespace BudgetsStorage.Services
 
 
             var dataUser = new User(signInUser.Guid, signUpUser.FirstName, signUpUser.LastName, signUpUser.Email);
-            var defaultWallet = new Wallet(dataUser.Id, "First Wallet", "", 0, Currency.USD);
+            var defaultWallet = new Wallet(dataUser.Id, "First Wallet", "Firts Description", 0, Currency.USD);
             dataUser.AddWallet(defaultWallet);
 
             await Add(signInUser);

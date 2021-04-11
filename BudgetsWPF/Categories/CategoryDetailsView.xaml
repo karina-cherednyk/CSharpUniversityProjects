@@ -49,6 +49,7 @@
             Margin="10 0"
             Grid.Row="4" Grid.Column="1"
             Content="Delete Category" 
+            Style="{StaticResource MaterialDesignRaisedAccentButton}"
             Command="{Binding RemoveCategoryCommand}"
             />
     </Grid>

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BudgetsWPF.Wallets"
              mc:Ignorable="d" 
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-             Height="400"
+             MinHeight="600"
              >
     <UserControl.Resources>
         <DataTemplate DataType="{ x:Type local:WalletDetailsViewModel}">
@@ -40,6 +40,14 @@
                         md:HintAssist.Hint="Enter your last name"
                         Text="{Binding Surname}" />
         
+        <Button         Grid.Row="1" Grid.Column="4"
+                        Width="130"
+                        HorizontalAlignment="Right"
+                        Margin="0 0 10 0"
+                        Content="Save User Info"
+                        Command="{Binding SaveUserInfoCommand}"
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+            />
         <!--Menu-->
         <ListView   Grid.ColumnSpan="3" 
                     Grid.Row="2"

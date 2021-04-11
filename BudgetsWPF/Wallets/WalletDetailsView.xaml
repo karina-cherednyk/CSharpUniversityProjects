@@ -8,6 +8,7 @@
              d:DesignHeight="800" d:DesignWidth="800">
     <Grid Background="White">
         <Grid.RowDefinitions>
+            <RowDefinition MinHeight="220"/>
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
@@ -22,9 +23,23 @@
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Name"
                        />
-            <TextBlock MinWidth="300" Margin="10" 
+            <TextBox MinWidth="300" Margin="10" 
                      HorizontalAlignment="Stretch" 
                      Text="{Binding Name}"/>
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Description"
+                       />
+            <TextBox MinWidth="300" Margin="10" 
+                     HorizontalAlignment="Stretch" 
+                     Text="{Binding Description}"/>
+            
+            <TextBlock Margin="10, 10, 10, 0"
+                       Text="Initial balance"
+                       />
+            <TextBox MinWidth="300" Margin="10" 
+                     HorizontalAlignment="Stretch" 
+                     PreviewTextInput="NumberValidationTextBox"
+                     Text="{Binding InitialBalance}"/>
         </StackPanel>
         <StackPanel 
                 Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
@@ -47,6 +62,7 @@
             </ListBox>
             <Button Margin="10, 10, 10, 0"
                     Content="Add New Category"
+                    Style="{StaticResource MaterialDesignRaisedLightButton}"
                     Command="{Binding AddCategoryCommand}"
                     />
         </StackPanel>
@@ -73,6 +89,8 @@
             <TextBlock MinWidth="300" Margin="10" 
                      HorizontalAlignment="Stretch" 
                      Text="{Binding MonthLoss}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4">
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Month Profit"/>
             <TextBlock MinWidth="300" Margin="10" 
@@ -81,20 +99,23 @@
         </StackPanel>
         <Button 
             Margin="10 0"
-            Grid.Row="3" Grid.Column="1"
+            Grid.Row="4" Grid.Column="1"
             Content="Show Transactions" 
+            Style="{StaticResource MaterialDesignFlatButton}"
             Command="{Binding ShowTransactionsCommand}"
             />
         <Button 
             Margin="10 0"
-            Grid.Row="4" Grid.Column="0"
+            Grid.Row="5" Grid.Column="0"
             Content="Save wallet" 
+
             Command="{Binding SaveWalletCommand}"
             />
         <Button 
             Margin="10 0"
-            Grid.Row="4" Grid.Column="1"
+            Grid.Row="5" Grid.Column="1"
             Content="Delete Wallet" 
+            Style="{StaticResource MaterialDesignRaisedAccentButton}"
             Command="{Binding RemoveWalletCommand}"
             />
     </Grid>

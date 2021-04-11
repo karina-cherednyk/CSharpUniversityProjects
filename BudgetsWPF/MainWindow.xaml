@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BudgetsWPF"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="600" Width="900" Background="#ffdadada">
+        Title="MainWindow" MinHeight="1000" Width="900" Background="#ffdadada">
     <Grid >
-        <Border MinWidth="700" MaxWidth="900" Margin="15,126,15,83" 
+        <Border MinWidth="800" MaxWidth="900" Margin="15,126,15,83" 
                 Background="White" VerticalAlignment="Center" 
-                Padding="30"  CornerRadius="20" MinHeight="500" MaxHeight="1000" >
+                Padding="30"  CornerRadius="20" MinHeight="800" MaxHeight="1000" >
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Color="Gray" ShadowDepth="1" />
             </Border.Effect>

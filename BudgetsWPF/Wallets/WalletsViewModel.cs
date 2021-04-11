@@ -21,7 +21,7 @@ namespace BudgetsWPF.Wallets
         public DelegateCommand SignInCommand { get; }
         public DelegateCommand AddWalletCommand { get; }
         public DelegateCommand GoToCategoriesCommand { get;  }
-
+        public DelegateCommand SaveUserInfoCommand { get; }
 
         public WalletsViewModel( User user, Action goToSignIn, Action<User, Wallet> goToTransactions, Action <User> goToCategories)
         {
@@ -33,6 +33,7 @@ namespace BudgetsWPF.Wallets
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
             SignInCommand = new DelegateCommand(_goToSignIn);
             AddWalletCommand = new DelegateCommand(AddWallet);
+            SaveUserInfoCommand = new DelegateCommand(SaveUserInfo, CanSaveUserInfo);
             
             GoToCategoriesCommand = new DelegateCommand(GoToCategories);
 
@@ -41,6 +42,16 @@ namespace BudgetsWPF.Wallets
                 Wallets.Add(new WalletDetailsViewModel(user, wallet, RemoveWallet, _goToTransactions));
             }
         }
+
+        public async void SaveUserInfo()
+        {
+            await UserService.Add(_user);
+            _user.HasChanges = false;
+            SaveUserInfoCommand.RaiseCanExecuteChanged();
+
+        }
+        public bool CanSaveUserInfo() { return _user.HasChanges && _user.IsValid; }
+
         public async void GoToCategories()
         {
             if(_user.Categories.Count == 0) 
@@ -50,7 +61,6 @@ namespace BudgetsWPF.Wallets
 
         public void RemoveWallet(WalletDetailsViewModel wd)
         {
-            _user.RemoveWallet(wd.Wallet);
             Wallets.Remove(wd);
             RaisePropertyChanged(nameof(CurrentWallet));
             RaisePropertyChanged(nameof(Wallets));
@@ -66,6 +76,7 @@ namespace BudgetsWPF.Wallets
             {
                 _user.FirstName = value;
                 RaisePropertyChanged();
+                SaveUserInfoCommand.RaiseCanExecuteChanged();
             }
         }
         
@@ -79,6 +90,7 @@ namespace BudgetsWPF.Wallets
             {
                 _user.LastName = value;
                 RaisePropertyChanged();
+                SaveUserInfoCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -98,7 +110,7 @@ namespace BudgetsWPF.Wallets
 
         public void AddWallet()
         {
-            Wallet w = new Wallet(_user.Id, "New wallet", "Some wallet", 0, Currency.UAH);
+            Wallet w = new Wallet(_user.Id, "", "", 0, Currency.UAH);
             _user.AddWallet(w);
             Wallets.Add(new WalletDetailsViewModel(_user, w, RemoveWallet, _goToTransactions));
             RaisePropertyChanged(nameof(Wallets));

@@ -7,14 +7,18 @@ namespace Budgets.BusinessLayer.Entities
 {
 	public class User : BaseEntity, ICategorizable
     {
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
+        private string _firstName, _lastName, _email;
+        public string LastName { get { return _lastName; } set { _lastName = value; HasChanges = true; } }
+        public string FirstName { get { return _firstName; } set { _firstName = value; HasChanges = true; } }
+
+        public string Email { get { return _email; } set { _email = value; HasChanges = true; } }
+
         [JsonIgnore]
         public string FullName {  get
             {
                 return FirstName + " " + LastName;
             } }
-        public string Email { get; set; }
+        
 
         [JsonIgnore]
         public HashSet<Category> Categories  => _categories; 
@@ -25,6 +29,7 @@ namespace Budgets.BusinessLayer.Entities
         private HashSet<Category> _categories;
         private HashSet<Wallet> _wallets;
 
+        [JsonConstructor]
         public User(Guid id,  string firstName, string lastName, string email)
         {
             Id = id;

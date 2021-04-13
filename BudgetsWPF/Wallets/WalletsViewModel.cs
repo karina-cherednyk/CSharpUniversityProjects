@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
 using BudgetsStorage.Services;
@@ -20,27 +22,38 @@ namespace BudgetsWPF.Wallets
 
         public DelegateCommand SignInCommand { get; }
         public DelegateCommand AddWalletCommand { get; }
-        public DelegateCommand GoToCategoriesCommand { get;  }
+        public DelegateCommand GoToCategoriesCommand { get; }
         public DelegateCommand SaveUserInfoCommand { get; }
+        public DelegateCommand ShareWalletsCommand { get; }
+        private Action<User, List<User>> _goToShare { get; }
 
-        public WalletsViewModel( User user, Action goToSignIn, Action<User, Wallet> goToTransactions, Action <User> goToCategories)
+        public WalletsViewModel( User user, Action goToSignIn, Action<User, Wallet> goToTransactions, Action <User> goToCategories, Action<User, List<User>> goToShare  )
         {
             _user = user;
             _goToSignIn = goToSignIn;
             _goToTransactions = goToTransactions;
             _goToCategories = goToCategories;
+            _goToShare = goToShare;
 
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
             SignInCommand = new DelegateCommand(_goToSignIn);
             AddWalletCommand = new DelegateCommand(AddWallet);
-            SaveUserInfoCommand = new DelegateCommand(SaveUserInfo, CanSaveUserInfo);
             
+            SaveUserInfoCommand = new DelegateCommand(SaveUserInfo, CanSaveUserInfo);
+            ShareWalletsCommand = new DelegateCommand(ShareWallets);
             GoToCategoriesCommand = new DelegateCommand(GoToCategories);
 
             foreach (var wallet in _user.Wallets)
             {
                 Wallets.Add(new WalletDetailsViewModel(user, wallet, RemoveWallet, _goToTransactions));
             }
+        }
+
+        public async void ShareWallets()
+        {
+            var musers = await UserService.All;
+            var users = musers.Values.Where(u => !u.Equals(_user)).ToList();
+            _goToShare(_user, users);
         }
 
         public async void SaveUserInfo()

@@ -80,13 +80,24 @@
                 Style="{StaticResource MaterialDesignFlatButton}"
                 Command="{Binding GoToCategoriesCommand}"/>
 
-        <Button Grid.Column="4"
-                Grid.Row="3"
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Column="4" Grid.Row="3"
+                    HorizontalAlignment="Right">
+            <Button 
                 MaxWidth="140"
-                Content="Add new wallet" 
+                Content="Share wallets" 
                 HorizontalAlignment="Right"
                 Margin="0 0 10 0"
+                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                Command="{Binding ShareWalletsCommand}"
+            />
+            <Button 
+                MaxWidth="140"
+                Content="Add new wallet" 
+                
+                Margin="0 0 10 0"
                 Command="{Binding AddWalletCommand}"/>
+        </StackPanel>
     </Grid>
         
 

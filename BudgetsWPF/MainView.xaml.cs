@@ -4,6 +4,8 @@ using BudgetsWPF.Authentication;
 using BudgetsWPF.Transactions;
 using BudgetsWPF.Categories;
 using BudgetsWPF.Wallets;
+using System.Collections.Generic;
+using BudgetsWPF.ShareUserWallet;
 
 namespace BudgetsWPF
 {
@@ -29,11 +31,16 @@ namespace BudgetsWPF
 
         public void GoToWalletsView(User user)
         {
-            Content = new WalletsView(user, GoToSignInView, GoToTransactionsView, GoToCategoriesView);
+            Content = new WalletsView(user, GoToSignInView, GoToTransactionsView, GoToCategoriesView, GoToShareView);
         }
         public void GoToCategoriesView(User user)
         {
             Content = new CategoriesView(user, GoToWalletsView);
+        }
+
+        public void GoToShareView(User user, List<User> users)
+        {
+            Content = new ShareView(user, users, GoToWalletsView);
         }
  
     }

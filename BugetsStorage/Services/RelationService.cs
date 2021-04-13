@@ -14,14 +14,14 @@ namespace BudgetsStorage.Services
     {
         private static readonly RelationStorage<T, U> _storage = new ();
 
-        public static async Task AddConnection(T t, U u)
+        public static async Task<bool> AddConnection(T t, U u)
         {
-            await _storage.AddAsync(t, u);
+            return await _storage.AddAsync(t, u);
         }
 
-        public static async Task RemoveConnection(T t, U u)
+        public static async Task<bool> RemoveConnection(T t, U u)
         {
-            await _storage.RemoveAsync(t, u);
+            return await _storage.RemoveAsync(t, u);
         }
     
     }

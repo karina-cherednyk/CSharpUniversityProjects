@@ -25,16 +25,18 @@ namespace BudgetsStorage
         {
             return Path.Combine(FolderName, obj.Guid.ToString("N"));
         }
-        public async Task AddAsync(T obj, U u)
+        public async Task<bool> AddAsync(T obj, U u)
         {
             HashSet<Guid> pairs = await GetSetAsync(obj);
             if (pairs.Contains(u.Guid))
-                return;
+                return false;
 
             pairs.Add(u.Guid);
             string stringObj = JsonSerializer.Serialize(pairs.ToList());
             using StreamWriter sw = new StreamWriter(FileName(obj), false);
             await sw.WriteAsync(stringObj);
+
+            return true;
         }
         private async Task<HashSet<Guid>> GetSetAsync(T obj) => (await GetAsync(obj)).ToHashSet();
         public async Task<List<Guid>> GetAsync(T obj)
@@ -53,17 +55,18 @@ namespace BudgetsStorage
             return us;
         }
 
-        public async Task RemoveAsync(T obj, U u)
+        public async Task<bool> RemoveAsync(T obj, U u)
         {
             HashSet<Guid> pairs = await GetSetAsync(obj);
             if (!pairs.Contains(u.Guid))
-                return;
+                return false;
 
             pairs.Remove(u.Guid);
             string stringObj = JsonSerializer.Serialize(pairs.ToList());
             using StreamWriter sw = new StreamWriter(FileName(obj), false);
             await sw.WriteAsync(stringObj);
 
+            return true;
         }
     }
 }

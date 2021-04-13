@@ -26,8 +26,22 @@
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
-        <TextBlock      MaxWidth="120"
+        <TextBlock      Margin="10 5 0 0"
+                        FontSize="15"
+                        Grid.ColumnSpan="2"
+                        FontWeight="Bold"
                         Text="Your Transactions" />
+
+        <TextBlock      Margin="10 5 0 0"
+                        Grid.Row="1"
+                        Text="Load transactions from:" />
+
+        <TextBox      Margin="10 0 0 5"
+                      MaxWidth="120"
+                      Grid.Row="1" Grid.Column="1"
+                      PreviewTextInput="NumberValidationTextBox"
+                      Text="{Binding LoadFrom}" />
+
         <!--Menu-->
         <ListView   Grid.ColumnSpan="3" 
                     Grid.Row="2"
@@ -46,14 +60,15 @@
 
         <Button Grid.Column="0"
                 Grid.Row="3"
-                MaxWidth="120"
-                Content="Add new transaction" 
+                MaxWidth="140"
+                Content="Add transaction" 
                 Command="{Binding AddTransactionCommand}"/>
 
         <Button Grid.Column="1"
                 Grid.Row="3"
-                MaxWidth="120"
+                MaxWidth="130"
                 Content="Go to Wallets" 
+                Style="{StaticResource MaterialDesignFlatButton}"
                 Command="{Binding ToWalletsCommand}"/>
     </Grid>
 </UserControl>

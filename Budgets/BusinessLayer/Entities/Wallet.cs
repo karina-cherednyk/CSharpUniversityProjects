@@ -130,7 +130,7 @@ namespace Budgets.BusinessLayer.Entities
         {
             if (
                 _transactions.Contains(transaction) ||
-                (transaction.User != null && !transaction.User.HasWallet(this)) ||
+                (transaction.Owner != null && !transaction.Owner.HasWallet(this)) ||
                 !_categories.Contains(transaction.Category)
                 ) return false;
 

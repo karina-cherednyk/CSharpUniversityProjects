@@ -57,7 +57,7 @@
         <Button Grid.Column="1"
                 Grid.Row="3"
                 Width="140"
-                Content="Go to Sign In" 
+                Content="Go to Wallets" 
                 Style="{StaticResource MaterialDesignFlatButton}" 
                 Command="{Binding GoToWalletsCommand}"/>
     </Grid>

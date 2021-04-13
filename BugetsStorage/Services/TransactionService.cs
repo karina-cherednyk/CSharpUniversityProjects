@@ -9,7 +9,6 @@ namespace BudgetsStorage.Services
     public class TransactionService: EntityService<Transaction>
     {
         private static readonly RelationStorage<Wallet, Transaction> _links = new();
-
         public static async Task FillTransactions(Wallet w)
         {
             List<Guid> wts = (await _links.GetAsync(w)).ToList();
@@ -26,6 +25,8 @@ namespace BudgetsStorage.Services
         {
             var tran = (await All)[id];
             await CategoryService.FillCategories(tran);
+            var owner = await UserService.Get(tran.Id);
+            tran.Owner = owner;
 
             return tran;
         }
@@ -36,13 +37,13 @@ namespace BudgetsStorage.Services
             var users = await links.GetAsync(t);
             var uid = users[0];
             var user = await UserService.Get(uid);
-            t.User = user;
+            t.Owner = user;
         }
 
         public new static async Task Add(Transaction obj)
         {
             await AddBase(obj);
-            User user = obj.User;
+            User user = obj.Owner;
             var links = new RelationStorage<Transaction, User>();
             var clinks = new RelationStorage<Transaction, Category>();
 

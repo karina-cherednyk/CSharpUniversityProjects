@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Windows;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
 using BudgetsStorage.Services;
@@ -16,6 +13,7 @@ namespace BudgetsWPF.Wallets
     class WalletDetailsViewModel: BindableBase
     {
         private string _selectedCurrency;
+        private Action<User, Wallet> _goToTransactions;
         private Action<WalletDetailsViewModel> _removeWalletFromWalletsView;
         private User _user;
         private Wallet _wallet;
@@ -33,10 +31,11 @@ namespace BudgetsWPF.Wallets
             _user = user;
             _wallet = wallet;
             _oldCategories = new();
+            _goToTransactions = goToTransactions;
             _wallet.Categories.ToList().ForEach(c => _oldCategories.Add(c));
             _selectedCurrency = CurrencyConvertor.CurencyToString(_wallet.Currency);
             _removeWalletFromWalletsView = removeWallet;
-            ShowTransactionsCommand = new DelegateCommand(() => goToTransactions(user, _wallet));
+            ShowTransactionsCommand = new DelegateCommand(ShowTransactions);
             SaveWalletCommand = new DelegateCommand(SaveWallet, CanSaveWallet);
             RemoveWalletCommand = new DelegateCommand(RemoveWallet, CanRemoveWallet);
             ToggleCategoryCommand = new DelegateCommand(ToggleCategory);
@@ -46,6 +45,24 @@ namespace BudgetsWPF.Wallets
         public bool CanSaveWallet() => _wallet.HasChanges && _wallet.IsValid;
 
         public bool CanRemoveWallet() => !_wallet.IsNew;
+
+
+        public void ShowTransactions()
+        {
+            if (_wallet.Categories.Count == 0)
+            {
+                string err = "Wallet has no categories\nCan`t add transaction\nStay here and add category?";
+                MessageBoxResult result = MessageBox.Show(err, "No categories", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No)
+                {
+                    _goToTransactions(_user, _wallet);
+                }
+            }
+            else
+            {
+                _goToTransactions(_user, _wallet);
+            }
+        }
 
         public async void RemoveWallet()
         {
@@ -93,6 +110,7 @@ namespace BudgetsWPF.Wallets
                 _wallet.Currency = CurrencyConvertor.CurrencyFromString(value);
 
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(InitialBalance));
                 RaisePropertyChanged(nameof(Balance));
                 RaisePropertyChanged(nameof(MonthLoss));
                 RaisePropertyChanged(nameof(MonthProfit));

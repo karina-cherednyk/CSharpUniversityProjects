@@ -5,27 +5,26 @@ using System.Windows;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
 using BudgetsStorage.Services;
+using BudgetsWPF.Navigation;
 using Prism.Commands;
 
 namespace BudgetsWPF.Authentication
 {
-    internal class SignUpViewModel: INotifyPropertyChanged
+    internal class SignUpViewModel: INotifyPropertyChanged, INavigatable
     {
-        private readonly Action _goToSignIn;
-        private readonly Action<User> _goToWallets;
+
         private readonly SignUpUser _regUser = new SignUpUser();
 
         public DelegateCommand SignUpCommand { get; }
         public DelegateCommand SignInCommand { get; }
 
 
-        public SignUpViewModel(Action goToSignIn, Action<User> goToWallets)
+        public SignUpViewModel()
         {
-            _goToSignIn = goToSignIn;
-            _goToWallets = goToWallets;
+
 
             SignUpCommand = new DelegateCommand(SignUp, IsSignUpEnabled);
-            SignInCommand = new DelegateCommand(_goToSignIn);
+            SignInCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignIn));
         }
 
         async private void SignUp()
@@ -34,7 +33,7 @@ namespace BudgetsWPF.Authentication
             {
                 var user = await AuthUserService.RegisterUserAsync(_regUser);
                 MessageBox.Show($"User {_regUser.Login} succesfully registered");
-                _goToWallets.Invoke(user);
+                MainNavigator.Navigate(NavigatableType.Wallets, user);
             }
             catch (Exception ex)
             {
@@ -133,11 +132,13 @@ namespace BudgetsWPF.Authentication
             }
         }
 
+        public NavigatableType Type => NavigatableType.SignUp;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

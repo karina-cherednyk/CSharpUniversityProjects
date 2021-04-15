@@ -1,4 +1,5 @@
 ﻿using Budgets.BusinessLayer.Entities;
+using BudgetsWPF.Navigation;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -7,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace BudgetsWPF.Transactions
 {
-    public class TransactionsViewModel: BindableBase
+    public class TransactionsViewModel: BindableBase, INavigatable
     {
         public ObservableCollection<TransactionDetailsViewModel> Transactions { get; }
         private TransactionDetailsViewModel _currentTransaction;
@@ -18,13 +19,13 @@ namespace BudgetsWPF.Transactions
         private Wallet _wallet;
         
 
-        public TransactionsViewModel(User user, Wallet wallet, Action goToWallets)
+        public TransactionsViewModel(User user, Wallet wallet)
         {
             _user = user;
             _wallet = wallet;
 
             Transactions = new();
-            ToWalletsCommand = new DelegateCommand(goToWallets);
+            ToWalletsCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.Wallets, _user));
             AddTransactionCommand = new DelegateCommand(AddTransaction, CanAddTransaction);
             foreach(var transaction in wallet.Transactions)
             {
@@ -78,5 +79,6 @@ namespace BudgetsWPF.Transactions
             }
         }
 
-        }
+        public NavigatableType Type => NavigatableType.Transactions;
+    }
 }

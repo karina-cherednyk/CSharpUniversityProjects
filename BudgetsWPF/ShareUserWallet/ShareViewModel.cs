@@ -1,5 +1,6 @@
 ﻿using Budgets.BusinessLayer.Entities;
 using BudgetsStorage.Services;
+using BudgetsWPF.Navigation;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
@@ -14,13 +15,13 @@ namespace BudgetsWPF.ShareUserWallet
     {
         private User _user;
         private List<User> _users;
-        public DelegateCommand ToWalletsCommand { get;  }
         public DelegateCommand ShareCommand { get; }
+        public DelegateCommand ToWalletsCommand { get; }
         public ShareViewModel(User user, List<User> users, Action<User> goToWallets)
         {
             _user = user;
             _users = users;
-            ToWalletsCommand = new DelegateCommand(() => goToWallets(user) );
+            ToWalletsCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.Wallets, _user));
             ShareCommand = new DelegateCommand(Share);
         }
         public async void Share()

@@ -4,27 +4,23 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
 using BudgetsStorage.Services;
+using BudgetsWPF.Navigation;
 using Prism.Commands;
 
 namespace BudgetsWPF.Authentication
 {
-    public class SignInViewModel : INotifyPropertyChanged
+    public class SignInViewModel : INotifyPropertyChanged, INavigatable 
     {
-
-        private readonly Action _goToSignUp;
-        private readonly Action<User> _goToWallets;
 
         public DelegateCommand SignInCommand { get; }
         public DelegateCommand SignUpCommand { get; }
 
 
-        public SignInViewModel(Action goToSignUp, Action<User> goToWallets)
+        public SignInViewModel()
         {
-            _goToSignUp = goToSignUp;
-            _goToWallets = goToWallets;
 
             SignInCommand = new DelegateCommand(SignIn, IsSignInEnabled);
-            SignUpCommand = new DelegateCommand(_goToSignUp);
+            SignUpCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignUp));
         }
 
 
@@ -45,7 +41,7 @@ namespace BudgetsWPF.Authentication
                 try
                 {
                     var user = await AuthUserService.AuthenticateAsync(_authUser);
-                    _goToWallets.Invoke(user);
+                    MainNavigator.Navigate(NavigatableType.Wallets, user);
                 }
                 catch(Exception ex)
                 {
@@ -61,6 +57,7 @@ namespace BudgetsWPF.Authentication
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
 
         private SignInUser _authUser = new SignInUser();
         public string Login
@@ -92,5 +89,8 @@ namespace BudgetsWPF.Authentication
                 }
             }
         }
+
+        public NavigatableType Type => NavigatableType.SignIn;
+
     }
 }

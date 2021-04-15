@@ -5,17 +5,15 @@ using System.Linq;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
 using BudgetsStorage.Services;
+using BudgetsWPF.Navigation;
 using Prism.Commands;
 using Prism.Mvvm;
 
 namespace BudgetsWPF.Wallets
 {
-    class WalletsViewModel: BindableBase
+    class WalletsViewModel: BindableBase, INavigatable
     {
         private WalletDetailsViewModel _currentWallet;
-        private readonly Action _goToSignIn;
-        private readonly Action<User,Wallet> _goToTransactions;
-        private readonly Action<User> _goToCategories;
 
         public ObservableCollection<WalletDetailsViewModel> Wallets { get; set; }
         private User _user;
@@ -25,18 +23,13 @@ namespace BudgetsWPF.Wallets
         public DelegateCommand GoToCategoriesCommand { get; }
         public DelegateCommand SaveUserInfoCommand { get; }
         public DelegateCommand ShareWalletsCommand { get; }
-        private Action<User, List<User>> _goToShare { get; }
 
-        public WalletsViewModel( User user, Action goToSignIn, Action<User, Wallet> goToTransactions, Action <User> goToCategories, Action<User, List<User>> goToShare  )
+        public WalletsViewModel( User user )
         {
             _user = user;
-            _goToSignIn = goToSignIn;
-            _goToTransactions = goToTransactions;
-            _goToCategories = goToCategories;
-            _goToShare = goToShare;
 
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
-            SignInCommand = new DelegateCommand(_goToSignIn);
+            SignInCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignIn));
             AddWalletCommand = new DelegateCommand(AddWallet);
             
             SaveUserInfoCommand = new DelegateCommand(SaveUserInfo, CanSaveUserInfo);
@@ -45,7 +38,7 @@ namespace BudgetsWPF.Wallets
 
             foreach (var wallet in _user.Wallets)
             {
-                Wallets.Add(new WalletDetailsViewModel(user, wallet, RemoveWallet, _goToTransactions));
+                Wallets.Add(new WalletDetailsViewModel(user, wallet, RemoveWallet));
             }
         }
 
@@ -53,7 +46,7 @@ namespace BudgetsWPF.Wallets
         {
             var musers = await UserService.All;
             var users = musers.Values.Where(u => !u.Equals(_user)).ToList();
-            _goToShare(_user, users);
+            MainNavigator.Navigate(NavigatableType.Share, _user, users);
         }
 
         public async void SaveUserInfo()
@@ -69,7 +62,7 @@ namespace BudgetsWPF.Wallets
         {
             if(_user.Categories.Count == 0) 
                 await CategoryService.FillCategories(_user);
-            _goToCategories(_user);
+            MainNavigator.Navigate(NavigatableType.Categories, _user);
         }
 
         public void RemoveWallet(WalletDetailsViewModel wd)
@@ -121,11 +114,13 @@ namespace BudgetsWPF.Wallets
             }
         }
 
+        public NavigatableType Type => NavigatableType.Wallets;
+
         public void AddWallet()
         {
             Wallet w = new Wallet(_user.Id, "", "", 0, Currency.UAH);
             _user.AddWallet(w);
-            Wallets.Add(new WalletDetailsViewModel(_user, w, RemoveWallet, _goToTransactions));
+            Wallets.Add(new WalletDetailsViewModel(_user, w, RemoveWallet));
             RaisePropertyChanged(nameof(Wallets));
         }
 

@@ -9,12 +9,9 @@ namespace BudgetsWPF.Categories
 
     public partial class CategoriesView : UserControl
     {
-        private CategoriesViewModel _viewModel;
-        public CategoriesView(User user, Action<User> goToWalletsView)
+        public CategoriesView()
         {
             InitializeComponent();
-            _viewModel = new CategoriesViewModel(user, goToWalletsView);
-            DataContext = _viewModel;
         }
     }
 }

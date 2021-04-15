@@ -5,6 +5,7 @@ using System.Windows;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
 using BudgetsStorage.Services;
+using BudgetsWPF.Navigation;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -13,7 +14,6 @@ namespace BudgetsWPF.Wallets
     class WalletDetailsViewModel: BindableBase
     {
         private string _selectedCurrency;
-        private Action<User, Wallet> _goToTransactions;
         private Action<WalletDetailsViewModel> _removeWalletFromWalletsView;
         private User _user;
         private Wallet _wallet;
@@ -26,12 +26,11 @@ namespace BudgetsWPF.Wallets
 
    
 
-        public WalletDetailsViewModel(User user,  Wallet wallet, Action<WalletDetailsViewModel> removeWallet, Action<User, Wallet> goToTransactions)
+        public WalletDetailsViewModel(User user,  Wallet wallet, Action<WalletDetailsViewModel> removeWallet)
         {
             _user = user;
             _wallet = wallet;
             _oldCategories = new();
-            _goToTransactions = goToTransactions;
             _wallet.Categories.ToList().ForEach(c => _oldCategories.Add(c));
             _selectedCurrency = CurrencyConvertor.CurencyToString(_wallet.Currency);
             _removeWalletFromWalletsView = removeWallet;
@@ -55,12 +54,12 @@ namespace BudgetsWPF.Wallets
                 MessageBoxResult result = MessageBox.Show(err, "No categories", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.No)
                 {
-                    _goToTransactions(_user, _wallet);
+                    MainNavigator.Navigate(NavigatableType.Transactions, _user, _wallet);
                 }
             }
             else
             {
-                _goToTransactions(_user, _wallet);
+                MainNavigator.Navigate(NavigatableType.Transactions, _user, _wallet);
             }
         }
 

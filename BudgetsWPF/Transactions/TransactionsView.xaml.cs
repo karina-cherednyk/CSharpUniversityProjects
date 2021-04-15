@@ -10,13 +10,11 @@ namespace BudgetsWPF.Transactions
 
     public partial class TransactionsView : UserControl
     {
-        private TransactionsViewModel _viewModel;
+
         private static Regex numRegex = new Regex("[^0-9]+");
-        public TransactionsView(User user, Wallet wallet, Action goToWallets)
+        public TransactionsView()
         {
             InitializeComponent();
-            _viewModel = new TransactionsViewModel(user, wallet, goToWallets);
-            DataContext = _viewModel;
         }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {

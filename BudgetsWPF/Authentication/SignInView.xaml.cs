@@ -15,10 +15,10 @@ namespace BudgetsWPF.Authentication
     {
         private SignInViewModel _viewModel;
 
-        public SignInView(Action goToSignUp, Action<User> goToWallets)
+        public SignInView()
         {
             InitializeComponent();
-            _viewModel = new SignInViewModel(goToSignUp, goToWallets);
+            _viewModel = new SignInViewModel();
             DataContext = _viewModel;
         }
 

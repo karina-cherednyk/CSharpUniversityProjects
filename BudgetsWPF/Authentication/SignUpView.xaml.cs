@@ -15,10 +15,10 @@ namespace BudgetsWPF.Authentication
 
         private SignUpViewModel _viewModel;
 
-        public SignUpView(Action goToSignIn, Action<User> goToWallets)
+        public SignUpView()
         {
             InitializeComponent();
-            _viewModel = new SignUpViewModel(goToSignIn, goToWallets);
+            _viewModel = new SignUpViewModel();
             DataContext = _viewModel;
         }
         private void OnPasswordChanged(object sender, RoutedEventArgs e)

@@ -12,12 +12,9 @@ namespace BudgetsWPF.ShareUserWallet
 {
     public partial class ShareView : UserControl
     {
-        public ShareViewModel _viewModel;
-        public ShareView(User user, List<User> users, Action<User> goToWallets)
+        public ShareView()
         {
             InitializeComponent();
-            _viewModel = new ShareViewModel(user, users, goToWallets);
-            DataContext = _viewModel;
         }
     }
 }

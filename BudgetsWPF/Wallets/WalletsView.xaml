@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              MinHeight="600"
+             IsEnabled="{Binding IsEnabled}"  
              >
     <UserControl.Resources>
         <DataTemplate DataType="{ x:Type local:WalletDetailsViewModel}">

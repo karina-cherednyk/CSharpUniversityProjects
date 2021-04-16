@@ -41,28 +41,43 @@ namespace BudgetsWPF.Wallets
                 Wallets.Add(new WalletDetailsViewModel(user, wallet, RemoveWallet));
             }
         }
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            private set
+            {
+                _isEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public async void ShareWallets()
         {
+            IsEnabled = false;
             var musers = await UserService.All;
             var users = musers.Values.Where(u => !u.Equals(_user)).ToList();
             MainNavigator.Navigate(NavigatableType.Share, _user, users);
+            IsEnabled = true;
         }
 
         public async void SaveUserInfo()
         {
+            IsEnabled = false;
             await UserService.Add(_user);
             _user.HasChanges = false;
             SaveUserInfoCommand.RaiseCanExecuteChanged();
-
+            IsEnabled = true;
         }
         public bool CanSaveUserInfo() { return _user.HasChanges && _user.IsValid; }
 
         public async void GoToCategories()
         {
-            if(_user.Categories.Count == 0) 
+            IsEnabled = false;
+            if (_user.Categories.Count == 0) 
                 await CategoryService.FillCategories(_user);
             MainNavigator.Navigate(NavigatableType.Categories, _user);
+            IsEnabled = true;
         }
 
         public void RemoveWallet(WalletDetailsViewModel wd)

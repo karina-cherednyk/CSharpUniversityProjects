@@ -41,7 +41,19 @@ namespace BudgetsWPF.Transactions
 
             IsEnabled = user == _owner;
         }
-        public bool IsEnabled { get; }
+
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            private set
+            {
+                _isEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         public string User => _owner.FullName;
 

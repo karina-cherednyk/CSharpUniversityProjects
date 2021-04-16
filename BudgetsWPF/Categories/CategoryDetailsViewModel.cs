@@ -26,6 +26,17 @@ namespace BudgetsWPF.Categories
             SaveCategoryCommand = new DelegateCommand(SaveCategory, CanSaveCategory);
         }
 
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            private set
+            {
+                _isEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public string DisplayName {
             get
             {
@@ -37,11 +48,14 @@ namespace BudgetsWPF.Categories
         }
         public async void RemoveCategory()
         {
+            IsEnabled = false;
             await RelationService<User, Category>.RemoveConnection(_user, _category);
             _user.RemoveCategory(_category);
             _removeCategoryFromCategoriesView(this);
+            IsEnabled = true;
         }
         public async void SaveCategory() {
+            IsEnabled = false;
             await CategoryService.Add(_category);
             await RelationService<User, Category>.AddConnection(_user, _category);
             _user.AddCategory(_category);
@@ -51,6 +65,7 @@ namespace BudgetsWPF.Categories
             RemoveCategoryCommand.RaiseCanExecuteChanged();
             SaveCategoryCommand.RaiseCanExecuteChanged();
             RaisePropertyChanged(nameof(DisplayName));
+            IsEnabled = true;
         }
 
         public bool CanSaveCategory() => _category.HasChanges && _category.IsValid;

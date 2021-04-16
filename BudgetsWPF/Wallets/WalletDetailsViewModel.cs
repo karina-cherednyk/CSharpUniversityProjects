@@ -43,6 +43,17 @@ namespace BudgetsWPF.Wallets
 
             IsOwner = _user.Id.Equals(wallet.Owner);
         }
+
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            private set
+            {
+                _isEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
         public bool IsOwner { get; }
 
         public bool CanSaveWallet() => _wallet.HasChanges && _wallet.IsValid;
@@ -52,6 +63,7 @@ namespace BudgetsWPF.Wallets
 
         public async void ShowTransactions()
         {
+            IsEnabled = false;
             if (_wallet.Categories.Count == 0)
             {
                 string err = "Wallet has no categories\nCan`t add transaction\nStay here and add category?";
@@ -67,16 +79,22 @@ namespace BudgetsWPF.Wallets
                 await TransactionService.FillTransactions(_wallet);
                 MainNavigator.Navigate(NavigatableType.Transactions, _user, _wallet);
             }
+            IsEnabled = true;
         }
 
         public async void RemoveWallet()
         {
+            IsEnabled = false;
             await RelationService<User, Wallet>.RemoveConnection(_user, _wallet);
             _user.RemoveWallet(_wallet);
             _removeWalletFromWalletsView(this);
+
+            IsEnabled = true;
         }
         public async void SaveWallet()
         {
+            IsEnabled = false;
+
             await WalletService.Add(_wallet);
             await RelationService<User, Wallet>.AddConnection(_user, _wallet);
 
@@ -100,6 +118,8 @@ namespace BudgetsWPF.Wallets
             RemoveWalletCommand.RaiseCanExecuteChanged();
             SaveWalletCommand.RaiseCanExecuteChanged();
             RaisePropertyChanged(nameof(DisplayName));
+
+            IsEnabled = true;
         }
 
 

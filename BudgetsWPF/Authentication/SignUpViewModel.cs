@@ -27,8 +27,20 @@ namespace BudgetsWPF.Authentication
             SignInCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignIn));
         }
 
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            private set
+            {
+                _isEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
         async private void SignUp()
         {
+            IsEnabled = false;
            try
             {
                 var user = await AuthUserService.RegisterUserAsync(_regUser);
@@ -39,6 +51,7 @@ namespace BudgetsWPF.Authentication
             {
                 MessageBox.Show($"Sign In failed: {ex.Message}");
             }
+            IsEnabled = true;
 
         }
         private bool IsSignUpEnabled()

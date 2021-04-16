@@ -23,6 +23,16 @@ namespace BudgetsWPF.Authentication
             SignUpCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignUp));
         }
 
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            private set
+            {
+                _isEnabled = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool IsSignInEnabled()
         {
@@ -31,6 +41,7 @@ namespace BudgetsWPF.Authentication
 
         async private void SignIn()
         {
+            IsEnabled = false;
             if(string.IsNullOrWhiteSpace(Login) ||
                 string.IsNullOrEmpty(Password))
             {
@@ -48,6 +59,7 @@ namespace BudgetsWPF.Authentication
                     MessageBox.Show($"Sign In failed: {ex.Message}");
                 }
             }
+            IsEnabled = true;
         }
 
 

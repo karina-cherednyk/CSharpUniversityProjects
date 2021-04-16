@@ -34,6 +34,7 @@
 
         <TextBlock      Margin="10 5 0 0"
                         Grid.Row="1"
+                        VerticalAlignment="Center"
                         Text="Load transactions from:" />
 
         <TextBox      Margin="10 0 0 5"

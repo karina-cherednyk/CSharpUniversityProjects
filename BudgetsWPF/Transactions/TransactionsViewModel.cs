@@ -27,7 +27,7 @@ namespace BudgetsWPF.Transactions
             Transactions = new ObservableCollection<TransactionDetailsViewModel>();
             ToWalletsCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.Wallets, _user));
             AddTransactionCommand = new DelegateCommand(AddTransaction, CanAddTransaction);
-            foreach(var transaction in wallet.Transactions)
+            foreach(var transaction in wallet.LoadFrom(0))
             {
                 Transactions.Add(new TransactionDetailsViewModel(user, wallet, transaction, RemoveTransactionView));
             }
@@ -66,7 +66,7 @@ namespace BudgetsWPF.Transactions
                 RaisePropertyChanged();
             }
         }
-        private uint _loadFrom = 0;
+        private int _loadFrom = 1;
         public string LoadFrom
         {
             get
@@ -75,11 +75,20 @@ namespace BudgetsWPF.Transactions
             }
             set
             {
-                uint val;
-                if (uint.TryParse(value, out val))
+                int val;
+                if (int.TryParse(value, out val))
                 {
+                    if (_loadFrom == val) return;
                     _loadFrom = val;
+                    Transactions.Clear();
+                    foreach (var transaction in _wallet.LoadFrom(_loadFrom-1))
+                    {
+                        Transactions.Add(new TransactionDetailsViewModel(_user, _wallet, transaction, RemoveTransactionView));
+                    }
+
                     RaisePropertyChanged();
+                    RaisePropertyChanged(nameof(CurrentTransaction));
+                    RaisePropertyChanged(nameof(Transactions));
                 }
             }
         }

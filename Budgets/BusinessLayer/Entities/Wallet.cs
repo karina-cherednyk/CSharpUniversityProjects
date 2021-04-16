@@ -170,5 +170,13 @@ namespace Budgets.BusinessLayer.Entities
                 Balance >= 0;
 
         }
+
+        public List<Transaction> LoadFrom(int idx)
+        {
+            int maxCount = _transactions.Count - idx;
+            if (idx < 0 || maxCount <= 0) return new();
+
+            return _transactions.GetRange(idx, Math.Min(maxCount, 10) );
+        }
     }
 }

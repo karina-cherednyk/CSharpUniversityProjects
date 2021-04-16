@@ -10,7 +10,7 @@ namespace BudgetsWPF.Transactions
 {
     public class TransactionsViewModel: BindableBase, INavigatable
     {
-        public ObservableCollection<TransactionDetailsViewModel> Transactions { get; }
+        public ObservableCollection<TransactionDetailsViewModel> Transactions { get; set;  }
         private TransactionDetailsViewModel _currentTransaction;
         public DelegateCommand ToWalletsCommand { get;  }
         public DelegateCommand AddTransactionCommand { get; }
@@ -24,7 +24,7 @@ namespace BudgetsWPF.Transactions
             _user = user;
             _wallet = wallet;
 
-            Transactions = new();
+            Transactions = new ObservableCollection<TransactionDetailsViewModel>();
             ToWalletsCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.Wallets, _user));
             AddTransactionCommand = new DelegateCommand(AddTransaction, CanAddTransaction);
             foreach(var transaction in wallet.Transactions)
@@ -44,7 +44,6 @@ namespace BudgetsWPF.Transactions
             Transaction t = new Transaction(_user, 0, _wallet.Currency, null, "");
             _wallet.AddTransaction(t);
             Transactions.Add(new TransactionDetailsViewModel(_user, _wallet, t, RemoveTransactionView));
-            RaisePropertyChanged(nameof(CurrentTransaction));
             RaisePropertyChanged(nameof(Transactions));
         }
 
@@ -64,6 +63,7 @@ namespace BudgetsWPF.Transactions
             set
             {
                 _currentTransaction = value;
+                RaisePropertyChanged();
             }
         }
         private uint _loadFrom = 0;
@@ -75,7 +75,12 @@ namespace BudgetsWPF.Transactions
             }
             set
             {
-                _loadFrom  = uint.Parse(value);
+                uint val;
+                if (uint.TryParse(value, out val))
+                {
+                    _loadFrom = val;
+                    RaisePropertyChanged();
+                }
             }
         }
 

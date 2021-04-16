@@ -37,7 +37,7 @@
             TextAlignment="Center"
             VerticalAlignment="Center"
             FontSize="20"
-            Text="Categories"
+            Text="Wallets"
             />
         <ListView 
             Grid.Row="2"
@@ -47,9 +47,9 @@
             />
         <ListView 
             Grid.Row="2" Grid.Column="1"
-            ItemsSource="{Binding Users}"
-            DisplayMemberPath="FullName"
-            SelectedItem="{Binding SelectedUser}"
+            ItemsSource="{Binding Wallets}"
+            DisplayMemberPath="Name"
+            SelectedItem="{Binding SelectedWallet}"
             />
         <Button Grid.Row="3" 
                 Content="Share wallet with this user"

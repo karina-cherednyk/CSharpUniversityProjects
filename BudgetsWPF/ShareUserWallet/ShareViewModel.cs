@@ -11,39 +11,28 @@ using System.Windows;
 
 namespace BudgetsWPF.ShareUserWallet
 {
-    public class ShareViewModel
+    public class ShareViewModel: INavigatable
     {
         private User _user;
         private List<User> _users;
+        private User _selectedUser;
+        private Wallet _selectedWallet;
         public DelegateCommand ShareCommand { get; }
         public DelegateCommand ToWalletsCommand { get; }
-        public ShareViewModel(User user, List<User> users, Action<User> goToWallets)
+        public ShareViewModel(User user, List<User> users)
         {
             _user = user;
             _users = users;
             ToWalletsCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.Wallets, _user));
-            ShareCommand = new DelegateCommand(Share);
+            ShareCommand = new DelegateCommand(Share, CanShare);
+        }
+        public bool CanShare()
+        {
+            return SelectedUser != null && SelectedWallet != null;
         }
         public async void Share()
         {
-            if(SelectedUser == null && SelectedCategory == null)
-            {
-                MessageBox.Show("Choose user and category!");
-                return;
-            }
-            if (SelectedUser == null)
-            {
-                MessageBox.Show("Choose user!");
-                return;
-            }
-
-            if (SelectedCategory == null)
-            {
-                MessageBox.Show("Choose category!");
-                return;
-            }
-            
-            var shared = await RelationService<User, Category>.AddConnection(SelectedUser, SelectedCategory);
+            var shared = await RelationService<User, Wallet>.AddConnection(SelectedUser, SelectedWallet);
             if (shared)
             {
                 MessageBox.Show("Successfully shared wallet");
@@ -53,11 +42,24 @@ namespace BudgetsWPF.ShareUserWallet
                 MessageBox.Show("User already owns this wallet");
             }
         }
-        public User SelectedUser { get; set; }
-        public Category SelectedCategory { get; set; }
+        public User SelectedUser { 
+            get { return _selectedUser; } 
+            set { 
+                _selectedUser = value;
+                ShareCommand.RaiseCanExecuteChanged();
+            } 
+        }
+        public Wallet SelectedWallet { 
+            get { return _selectedWallet; } 
+            set { 
+                _selectedWallet = value;
+                ShareCommand.RaiseCanExecuteChanged();
+            } 
+        }
 
         public List<User> Users => _users;
-        public List<Category> Categories => _user.Categories.ToList();
+        public List<Wallet> Wallets => _user.Wallets.ToList();
 
+        public NavigatableType Type => NavigatableType.Share;
     }
 }

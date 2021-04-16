@@ -25,7 +25,7 @@ namespace BudgetsStorage.Services
         {
             var tran = (await All)[id];
             await CategoryService.FillCategories(tran);
-            var owner = await UserService.Get(tran.Id);
+            var owner = await UserService.Get(tran.OwnerId);
             tran.Owner = owner;
 
             return tran;

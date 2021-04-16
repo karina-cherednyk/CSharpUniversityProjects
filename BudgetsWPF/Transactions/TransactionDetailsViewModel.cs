@@ -29,7 +29,7 @@ namespace BudgetsWPF.Transactions
             _wallet = wallet;
             _owner = transaction.Owner;
             _currentUser = user;
-            _sum = _transaction.Sum.ToString("F");
+            
             _selectedCurrency = CurrencyConvertor.CurencyToString(_transaction.Currency);
             _removeTransactionView = removeTransactionView;
             
@@ -38,9 +38,12 @@ namespace BudgetsWPF.Transactions
 
             if (!_transaction.IsNew) _displayIndex = _wallet.Transactions.IndexOf(_transaction) + 1;
             else _displayIndex = ++newCount;
-        }
 
-        public string User => _transaction.Owner.FullName;
+            IsEnabled = user == _owner;
+        }
+        public bool IsEnabled { get; }
+
+        public string User => _owner.FullName;
 
         public bool CanSaveTransaction() => _transaction.HasChanges && _transaction.IsValid;
         public bool CanRemoveTransaction() => !_transaction.IsNew && _owner.Equals( _currentUser);
@@ -53,10 +56,14 @@ namespace BudgetsWPF.Transactions
         }
         public async void SaveTransaction()
         {
+            _wallet.AddTransaction(_transaction);
             await TransactionService.Add(_transaction);
+            await WalletService.Add(_wallet);
             await RelationService<Wallet, Transaction>.AddConnection(_wallet, _transaction);
+
             _transaction.HasChanges = false;
             _transaction.IsNew = false;
+            
             RemoveTransactionCommand.RaiseCanExecuteChanged();
             SaveTransactionCommand.RaiseCanExecuteChanged();
 
@@ -65,16 +72,26 @@ namespace BudgetsWPF.Transactions
         public DateTime Date
         {
             get { return _transaction.Date; }
-            set { _transaction.Date = value; }
+            set { 
+                _transaction.Date = value; 
+                SaveTransactionCommand.RaiseCanExecuteChanged(); 
+            }
         }
 
-        private string _sum;
         public string Sum
         {
-            get { return _sum; }
+            get { return _transaction.Sum.ToString("F"); }
             set
             {
-                _sum = value;
+                decimal val;
+                if (decimal.TryParse(value, out val))
+                {
+                    _transaction.Sum = val;
+                    SaveTransactionCommand.RaiseCanExecuteChanged();
+                }
+                else
+                    _transaction.Sum = 0;
+                RaisePropertyChanged();
             }
         }
 
@@ -87,6 +104,7 @@ namespace BudgetsWPF.Transactions
             set
             {
                 _transaction.Category = value;
+                SaveTransactionCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -99,23 +117,13 @@ namespace BudgetsWPF.Transactions
             }
         }
 
-
-        public void SetSum()
-        {
-            decimal value;
-            if (decimal.TryParse(_sum, out value))
-            {
-                Sum = value.ToString("F");
-                _transaction.Sum = value;
-            }
-            else
-                Sum = string.Empty;
-        }
-
         public string Description
         {
             get { return _transaction.Description; }
-            set { _transaction.Description = value; }
+            set { 
+                _transaction.Description = value;
+                SaveTransactionCommand.RaiseCanExecuteChanged();
+            }
         }
 
 
@@ -134,7 +142,7 @@ namespace BudgetsWPF.Transactions
                 RaisePropertyChanged();
                 Sum = _transaction.Sum.ToString("F");
                 RaisePropertyChanged(nameof(Sum));
-
+                SaveTransactionCommand.RaiseCanExecuteChanged();
             }
         }
 

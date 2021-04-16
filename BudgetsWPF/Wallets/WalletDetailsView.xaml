@@ -25,12 +25,14 @@
                        />
             <TextBox MinWidth="300" Margin="10" 
                      HorizontalAlignment="Stretch" 
+                     IsEnabled="{Binding IsOwner}"
                      Text="{Binding Name}"/>
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Description"
                        />
             <TextBox MinWidth="300" Margin="10" 
                      HorizontalAlignment="Stretch" 
+                     IsEnabled="{Binding IsOwner}"
                      Text="{Binding Description}"/>
             
             <TextBlock Margin="10, 10, 10, 0"
@@ -38,6 +40,7 @@
                        />
             <TextBox MinWidth="300" Margin="10" 
                      HorizontalAlignment="Stretch" 
+                     IsEnabled="{Binding IsOwner}"
                      PreviewTextInput="NumberValidationTextBox"
                      Text="{Binding InitialBalance}"/>
         </StackPanel>

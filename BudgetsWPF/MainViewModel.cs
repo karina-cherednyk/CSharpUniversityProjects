@@ -2,6 +2,7 @@
 using BudgetsWPF.Authentication;
 using BudgetsWPF.Categories;
 using BudgetsWPF.Navigation;
+using BudgetsWPF.ShareUserWallet;
 using BudgetsWPF.Transactions;
 using BudgetsWPF.Wallets;
 using System;
@@ -30,6 +31,7 @@ namespace BudgetsWPF
                 case NavigatableType.Wallets: return new WalletsViewModel((User)args[0]);
                 case NavigatableType.Categories: return new CategoriesViewModel((User)args[0]);
                 case NavigatableType.Transactions: return new TransactionsViewModel((User)args[0], (Wallet)args[1]);
+                case NavigatableType.Share: return new ShareViewModel((User)args[0], (List<User>)args[1]);
                 default: throw new NotImplementedException();
             }
         }
@@ -40,7 +42,6 @@ namespace BudgetsWPF
         }
 
     }
-
 
     public class MainViewModel : NavigationBase
     {

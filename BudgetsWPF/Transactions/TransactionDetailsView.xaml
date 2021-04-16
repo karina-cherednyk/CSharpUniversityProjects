@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetsWPF.Transactions"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             IsEnabled="{Binding IsEnabled}"
+             >
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -39,23 +41,23 @@
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Transaction sum"
                        />
-            <TextBlock MinWidth="300" Margin="10" 
+            <TextBox MinWidth="300" Margin="10" 
+                     PreviewTextInput="NumberValidationTextBox"
                      HorizontalAlignment="Stretch" 
                      Text="{Binding Sum}"
-                     LostFocus="{Binding SetSum}"
                      />
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" >
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Transaction date"
                        />
-            <DatePicker SelectedDate="{Binding StartDate}" />
+            <DatePicker SelectedDate="{Binding Date}" />
         </StackPanel>
         <StackPanel Grid.Row="2" >
             <TextBlock Margin="10, 10, 10, 0"
                        Text="Transaction description"
                        />
-            <TextBlock MinWidth="300" Margin="10" 
+            <TextBox MinWidth="300" Margin="10" 
                      HorizontalAlignment="Stretch" 
                      Text="{Binding Description}"/>
         </StackPanel>
@@ -81,7 +83,7 @@
             Grid.Row="4" Grid.Column="1"
             Content="Delete Transaction" 
             Style="{StaticResource MaterialDesignRaisedAccentButton}"
-            Command="{Binding DeleteTransactionCommand}"
+            Command="{Binding RemoveTransactionCommand}"
             />
         
     </Grid>

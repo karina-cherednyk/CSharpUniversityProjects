@@ -11,7 +11,7 @@ using Prism.Mvvm;
 
 namespace BudgetsWPF.Wallets
 {
-    class WalletDetailsViewModel: BindableBase
+    class WalletDetailsViewModel : BindableBase
     {
         private string _selectedCurrency;
         private Action<WalletDetailsViewModel> _removeWalletFromWalletsView;
@@ -19,12 +19,13 @@ namespace BudgetsWPF.Wallets
         private Wallet _wallet;
         private HashSet<Category> _oldCategories;
 
+
         public DelegateCommand RemoveWalletCommand { get; }
         public DelegateCommand ShowTransactionsCommand { get; }
-        public DelegateCommand SaveWalletCommand { get;  }
-        public DelegateCommand ToggleCategoryCommand { get;  }
+        public DelegateCommand SaveWalletCommand { get; }
+        public DelegateCommand ToggleCategoryCommand { get; }
 
-   
+        
 
         public WalletDetailsViewModel(User user,  Wallet wallet, Action<WalletDetailsViewModel> removeWallet)
         {
@@ -39,14 +40,17 @@ namespace BudgetsWPF.Wallets
             RemoveWalletCommand = new DelegateCommand(RemoveWallet, CanRemoveWallet);
             ToggleCategoryCommand = new DelegateCommand(ToggleCategory);
             CategoryBtnText = CHOOSE_CAT;
+
+            IsOwner = _user.Id.Equals(wallet.Owner);
         }
+        public bool IsOwner { get; }
 
         public bool CanSaveWallet() => _wallet.HasChanges && _wallet.IsValid;
 
-        public bool CanRemoveWallet() => !_wallet.IsNew;
+        public bool CanRemoveWallet() => IsOwner &&  !_wallet.IsNew;
 
 
-        public void ShowTransactions()
+        public async void ShowTransactions()
         {
             if (_wallet.Categories.Count == 0)
             {
@@ -54,11 +58,13 @@ namespace BudgetsWPF.Wallets
                 MessageBoxResult result = MessageBox.Show(err, "No categories", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.No)
                 {
+                    await TransactionService.FillTransactions(_wallet);
                     MainNavigator.Navigate(NavigatableType.Transactions, _user, _wallet);
                 }
             }
             else
             {
+                await TransactionService.FillTransactions(_wallet);
                 MainNavigator.Navigate(NavigatableType.Transactions, _user, _wallet);
             }
         }
@@ -106,7 +112,17 @@ namespace BudgetsWPF.Wallets
             set
             {
                 _selectedCurrency = value;
-                _wallet.Currency = CurrencyConvertor.CurrencyFromString(value);
+                if (IsOwner)
+                {
+                    _wallet.Currency = CurrencyConvertor.CurrencyFromString(value);
+                }
+                else
+                {
+                    bool changes = _wallet.HasChanges;
+                    _wallet.Currency = CurrencyConvertor.CurrencyFromString(value);
+                    _wallet.HasChanges = changes;
+                }
+
 
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(InitialBalance));
@@ -117,9 +133,9 @@ namespace BudgetsWPF.Wallets
             }
         }
 
-        private const string SAVE_CAT = "Save Category",
-                       REM_CAT = "Remove Category",
-                       CHOOSE_CAT = "Choose category";
+        private const string    SAVE_CAT = "Save Category",
+                                REM_CAT = "Remove Category",
+                                CHOOSE_CAT = "Choose category";
         public string CategoryBtnText { get; set;  }
         
         public void ToggleCategory()
@@ -130,11 +146,16 @@ namespace BudgetsWPF.Wallets
                     return;
                 _wallet.AddCategory(SelectedUserCategory);
             }
-            else if (CategoryBtnText == REM_CAT)
+            else if (CategoryBtnText == REM_CAT && _user.HasCategory(SelectedWalletCategory))
             {
                 _wallet.RemoveCategory(SelectedWalletCategory);
             }
-            else return ;
+            else if (SelectedWalletCategory == null && _user.HasCategory(SelectedWalletCategory)) return;
+            else
+            {
+                CategoryBtnText = CHOOSE_CAT;
+                return;
+            }
 
             CategoryBtnText = CHOOSE_CAT;
             SelectedUserCategory = null;
@@ -157,7 +178,7 @@ namespace BudgetsWPF.Wallets
             set
             {
                 _selectedWalletCategory = value;
-                if(value != null) 
+                if(value != null ) 
                     CategoryBtnText = REM_CAT;
                 RaisePropertyChanged(nameof(CategoryBtnText));
             }
@@ -243,6 +264,7 @@ namespace BudgetsWPF.Wallets
                     _wallet.InitialBalance = val;
                     SaveWalletCommand.RaiseCanExecuteChanged();
                     RaisePropertyChanged(nameof(DisplayName));
+                    RaisePropertyChanged(nameof(Balance));
                 }
             }
         }

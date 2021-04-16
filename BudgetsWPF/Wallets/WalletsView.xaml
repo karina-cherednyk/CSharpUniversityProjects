@@ -33,11 +33,13 @@
 
         <TextBox        Grid.Row="1" MaxWidth="120"
                         md:HintAssist.Hint="Enter your first name"
+                        VerticalAlignment="Center"
                         Text="{Binding Name}"  />
 
         <TextBox        Grid.Row="1" MaxWidth="120"
                         Grid.Column="1"
                         md:HintAssist.Hint="Enter your last name"
+                        VerticalAlignment="Center"
                         Text="{Binding Surname}" />
         
         <Button         Grid.Row="1" Grid.Column="4"

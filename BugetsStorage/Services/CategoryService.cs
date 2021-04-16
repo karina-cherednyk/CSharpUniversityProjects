@@ -17,6 +17,7 @@ namespace BudgetsStorage.Services
 
             List<Guid> ids = await storage.GetAsync(obj);
             ids.ForEach(id => obj.AddCategory(all[id]));
+            obj.HasChanges = false;
         } 
     }
 }

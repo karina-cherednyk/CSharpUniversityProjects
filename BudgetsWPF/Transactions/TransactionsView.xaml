@@ -39,6 +39,7 @@
         <TextBox      Margin="10 0 0 5"
                       MaxWidth="120"
                       Grid.Row="1" Grid.Column="1"
+                      VerticalAlignment="Center"
                       PreviewTextInput="NumberValidationTextBox"
                       Text="{Binding LoadFrom}" />
 

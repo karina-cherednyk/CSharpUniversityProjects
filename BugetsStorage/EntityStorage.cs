@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BudgetsStorage
@@ -22,6 +23,7 @@ namespace BudgetsStorage
 
         public  async Task AddOrUpdateAsync(T obj)
         {
+            Thread.Sleep(1000);
             var stringObj = JsonSerializer.Serialize(obj);
 
             using (StreamWriter sw = new StreamWriter(Path.Combine(FolderName, obj.Guid.ToString("N")), false))
@@ -32,6 +34,7 @@ namespace BudgetsStorage
 
         public async Task<T> GetAsync(Guid guid)
         {
+            Thread.Sleep(1000);
             string stringObj = null;
             string filePath = Path.Combine(FolderName, guid.ToString("N"));
 
@@ -48,6 +51,7 @@ namespace BudgetsStorage
 
         public async Task<List<T>> GetAllAsync()
         {
+            Thread.Sleep(1000);
             var res = new List<T>();
             foreach (var file in Directory.EnumerateFiles(FolderName))
             {

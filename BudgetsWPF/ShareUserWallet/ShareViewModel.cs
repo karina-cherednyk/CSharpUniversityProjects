@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -25,7 +26,7 @@ namespace BudgetsWPF.ShareUserWallet
             _user = user;
             _users = users;
             ToWalletsCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.Wallets, _user));
-            ShareCommand = new DelegateCommand(Share, CanShare);
+            ShareCommand = new DelegateCommand(() => new Thread(() => Share()).Start(), CanShare);
 
         }
 

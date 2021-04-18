@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
@@ -35,9 +36,11 @@ namespace BudgetsWPF.Wallets
             _wallet.Categories.ToList().ForEach(c => _oldCategories.Add(c));
             _selectedCurrency = CurrencyConvertor.CurencyToString(_wallet.Currency);
             _removeWalletFromWalletsView = removeWallet;
-            ShowTransactionsCommand = new DelegateCommand(ShowTransactions);
-            SaveWalletCommand = new DelegateCommand(SaveWallet, CanSaveWallet);
-            RemoveWalletCommand = new DelegateCommand(RemoveWallet, CanRemoveWallet);
+
+            ShowTransactionsCommand = new DelegateCommand(() => new Thread(() => ShowTransactions()).Start());
+            SaveWalletCommand = new DelegateCommand(() => new Thread(() => SaveWallet()).Start(), CanSaveWallet);
+            RemoveWalletCommand = new DelegateCommand(() => new Thread(() => RemoveWallet()).Start(), CanRemoveWallet);
+
             ToggleCategoryCommand = new DelegateCommand(ToggleCategory);
             CategoryBtnText = CHOOSE_CAT;
 

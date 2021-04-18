@@ -4,7 +4,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using BudgetsStorage;
-
+using System.Threading;
 
 namespace BudgetsWPF.Categories
 {
@@ -22,8 +22,8 @@ namespace BudgetsWPF.Categories
             _category = category;
             _user = user;
             _removeCategoryFromCategoriesView = removeCategory;
-            RemoveCategoryCommand = new DelegateCommand(RemoveCategory, CanRemoveCategory);
-            SaveCategoryCommand = new DelegateCommand(SaveCategory, CanSaveCategory);
+            RemoveCategoryCommand = new DelegateCommand(() => new Thread(() => RemoveCategory()).Start(), CanRemoveCategory);
+            SaveCategoryCommand = new DelegateCommand(() => new Thread(() => SaveCategory()).Start(), CanSaveCategory);
         }
 
         private bool _isEnabled = true;

@@ -6,6 +6,7 @@ using Budgets.BusinessLayer.Entities;
 using BudgetsStorage.Services;
 using BudgetsWPF.Navigation;
 using Prism.Commands;
+using System.Threading;
 
 namespace BudgetsWPF.Authentication
 {
@@ -19,7 +20,7 @@ namespace BudgetsWPF.Authentication
         public SignInViewModel()
         {
 
-            SignInCommand = new DelegateCommand(SignIn, IsSignInEnabled);
+            SignInCommand = new DelegateCommand(() => new Thread(() => SignIn()).Start(), IsSignInEnabled);
             SignUpCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignUp));
         }
 
@@ -39,10 +40,11 @@ namespace BudgetsWPF.Authentication
             return !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password);
         }
 
-        async private void SignIn()
+        private async void SignIn()
         {
             IsEnabled = false;
-            if(string.IsNullOrWhiteSpace(Login) ||
+
+            if (string.IsNullOrWhiteSpace(Login) ||
                 string.IsNullOrEmpty(Password))
             {
                 MessageBox.Show("Login or password is empty");
@@ -54,7 +56,7 @@ namespace BudgetsWPF.Authentication
                     var user = await AuthUserService.AuthenticateAsync(_authUser);
                     MainNavigator.Navigate(NavigatableType.Wallets, user);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show($"Sign In failed: {ex.Message}");
                 }

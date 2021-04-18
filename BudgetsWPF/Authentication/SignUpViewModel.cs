@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
@@ -23,7 +24,7 @@ namespace BudgetsWPF.Authentication
         {
 
 
-            SignUpCommand = new DelegateCommand(SignUp, IsSignUpEnabled);
+            SignUpCommand = new DelegateCommand(() => new Thread(() => SignUp()).Start(), IsSignUpEnabled);
             SignInCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignIn));
         }
 
@@ -38,10 +39,11 @@ namespace BudgetsWPF.Authentication
             }
         }
 
-        async private void SignUp()
+        private async void SignUp()
         {
             IsEnabled = false;
-           try
+ 
+            try
             {
                 var user = await AuthUserService.RegisterUserAsync(_regUser);
                 MessageBox.Show($"User {_regUser.Login} succesfully registered");
@@ -52,8 +54,9 @@ namespace BudgetsWPF.Authentication
                 MessageBox.Show($"Sign In failed: {ex.Message}");
             }
             IsEnabled = true;
-
         }
+
+        
         private bool IsSignUpEnabled()
         {
             return

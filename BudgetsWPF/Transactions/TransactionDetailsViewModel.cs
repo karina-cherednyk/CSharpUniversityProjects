@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BudgetsStorage.Services;
+using System.Threading;
 
 namespace BudgetsWPF.Transactions
 {
@@ -33,8 +34,8 @@ namespace BudgetsWPF.Transactions
             _selectedCurrency = CurrencyConvertor.CurencyToString(_transaction.Currency);
             _removeTransactionView = removeTransactionView;
             
-            SaveTransactionCommand = new DelegateCommand(SaveTransaction, CanSaveTransaction);
-            RemoveTransactionCommand = new DelegateCommand(RemoveTransaction, CanRemoveTransaction);
+            SaveTransactionCommand = new DelegateCommand(() => new Thread(() => SaveTransaction()).Start(), CanSaveTransaction);
+            RemoveTransactionCommand = new DelegateCommand(() => new Thread(() => RemoveTransaction()).Start(), CanRemoveTransaction);
 
             if (!_transaction.IsNew) _displayIndex = _wallet.Transactions.IndexOf(_transaction) + 1;
             else _displayIndex = ++newCount;

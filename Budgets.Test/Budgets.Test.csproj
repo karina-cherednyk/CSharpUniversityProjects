@@ -7,19 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="BusinessLayerTests\BudgetTest.cs" />
-    <Compile Remove="BusinessLayerTests\CategoryTest.cs" />
-    <Compile Remove="BusinessLayerTests\TransactionTest.cs" />
-    <Compile Remove="BusinessLayerTests\UserTest.cs" />
     <Compile Remove="CommonTests\ConvertorTest.cs" />
     <Compile Remove="CommonTests\ValidatorTest.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="BusinessLayerTests\BudgetTest.cs" />
-    <None Include="BusinessLayerTests\CategoryTest.cs" />
-    <None Include="BusinessLayerTests\TransactionTest.cs" />
-    <None Include="BusinessLayerTests\UserTest.cs" />
     <None Include="CommonTests\ConvertorTest.cs" />
     <None Include="CommonTests\ValidatorTest.cs" />
   </ItemGroup>

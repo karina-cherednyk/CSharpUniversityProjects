@@ -5,6 +5,7 @@ using Prism.Mvvm;
 using System;
 using BudgetsStorage;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace BudgetsWPF.Categories
 {
@@ -22,8 +23,8 @@ namespace BudgetsWPF.Categories
             _category = category;
             _user = user;
             _removeCategoryFromCategoriesView = removeCategory;
-            RemoveCategoryCommand = new DelegateCommand(() => new Thread(() => RemoveCategory()).Start(), CanRemoveCategory);
-            SaveCategoryCommand = new DelegateCommand(() => new Thread(() => SaveCategory()).Start(), CanSaveCategory);
+            RemoveCategoryCommand = new DelegateCommand(RemoveCategory, CanRemoveCategory);
+            SaveCategoryCommand = new DelegateCommand(() => Task.Run(SaveCategory), CanSaveCategory);
         }
 
         private bool _isEnabled = true;
@@ -49,7 +50,7 @@ namespace BudgetsWPF.Categories
         public async void RemoveCategory()
         {
             IsEnabled = false;
-            await RelationService<User, Category>.RemoveConnection(_user, _category);
+            await Task.Run(async () => await RelationService<User, Category>.RemoveConnection(_user, _category));
             _user.RemoveCategory(_category);
             _removeCategoryFromCategoriesView(this);
             IsEnabled = true;

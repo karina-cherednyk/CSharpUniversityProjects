@@ -2,7 +2,7 @@
 using Budgets.Common;
 using System;
 using System.Linq;
-
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BudgetsStorage.Services
@@ -11,7 +11,6 @@ namespace BudgetsStorage.Services
     {
         public static async Task<User> RegisterUserAsync(SignUpUser signUpUser)
         {
-            //Thread.Sleep(2000);
             var signInUser = signUpUser.NewSignInUser();
             signInUser.EncryptPassword();
 
@@ -38,7 +37,6 @@ namespace BudgetsStorage.Services
 
         public static async Task<User> AuthenticateAsync(SignInUser signInUser)
         {
-            //Thread.Sleep(2000);
             if (string.IsNullOrWhiteSpace(signInUser.Login) || string.IsNullOrWhiteSpace(signInUser.Password))
                 throw new ArgumentException("Login or Password is Empty");
 

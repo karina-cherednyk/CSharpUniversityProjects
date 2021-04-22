@@ -31,7 +31,6 @@ namespace Budgets.BusinessLayer.Entities
             get { return _currency; }
             set
             {
-                InitialBalance = CurrencyConvertor.convert(InitialBalance, _currency, value);
                 _currency = value;
                 HasChanges = true;
             }
@@ -53,8 +52,20 @@ namespace Budgets.BusinessLayer.Entities
             _monthLoss = monthLoss;
             _monthProfit = monthProfit;
         }
+        public Wallet(Guid id, Guid owner, string name, string description,
+            decimal initialBalance, Currency currency)
+        {
+            Id = id;
+            Owner = owner;
+            Name = name;
+            Description = description;
+            Currency = currency;
+            InitialBalance = initialBalance;
+            _categories = new();
+            _transactions = new();
+        }
         public Wallet(Guid owner, string name, string description, decimal initialBalance, Currency currency):
-            this(Guid.NewGuid(), owner, name, description, initialBalance, currency, 0, 0, 0)
+            this(Guid.NewGuid(), owner, name, description, initialBalance, currency)
         {
             IsNew = true;
         }
@@ -167,7 +178,7 @@ namespace Budgets.BusinessLayer.Entities
             return
                 !string.IsNullOrWhiteSpace(Name) &
                 !string.IsNullOrWhiteSpace(Description) &
-                Balance >= 0;
+                _initBalance >= 0;
 
         }
 

@@ -7,6 +7,7 @@ using BudgetsStorage.Services;
 using BudgetsWPF.Navigation;
 using Prism.Commands;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace BudgetsWPF.Authentication
 {
@@ -20,7 +21,7 @@ namespace BudgetsWPF.Authentication
         public SignInViewModel()
         {
 
-            SignInCommand = new DelegateCommand(() => new Thread(() => SignIn()).Start(), IsSignInEnabled);
+            SignInCommand = new DelegateCommand(() => Task.Run(SignIn), IsSignInEnabled);
             SignUpCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignUp));
         }
 

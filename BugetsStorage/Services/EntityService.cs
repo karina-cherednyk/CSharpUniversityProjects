@@ -2,6 +2,7 @@
 using NuGet.Common;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BudgetsStorage.Services
@@ -27,6 +28,7 @@ namespace BudgetsStorage.Services
         public static async Task Add(T obj)  => await AddBase(obj);
         public static async Task AddBase(T obj)
         {
+            Thread.Sleep(1000);
             await _storage.AddOrUpdateAsync(obj);
             (await All).TryAdd(obj.Guid, obj);
         }

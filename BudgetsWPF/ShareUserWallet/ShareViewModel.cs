@@ -26,7 +26,7 @@ namespace BudgetsWPF.ShareUserWallet
             _user = user;
             _users = users;
             ToWalletsCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.Wallets, _user));
-            ShareCommand = new DelegateCommand(() => new Thread(() => Share()).Start(), CanShare);
+            ShareCommand = new DelegateCommand(() => Task.Run(Share), CanShare);
 
         }
 
@@ -46,6 +46,7 @@ namespace BudgetsWPF.ShareUserWallet
         public async void Share()
         {
             IsEnabled = false;
+            
             var shared = await RelationService<User, Wallet>.AddConnection(SelectedUser, SelectedWallet);
             if (shared)
             {

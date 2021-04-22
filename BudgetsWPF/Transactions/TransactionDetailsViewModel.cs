@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BudgetsStorage.Services;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace BudgetsWPF.Transactions
 {
@@ -34,8 +35,8 @@ namespace BudgetsWPF.Transactions
             _selectedCurrency = CurrencyConvertor.CurencyToString(_transaction.Currency);
             _removeTransactionView = removeTransactionView;
             
-            SaveTransactionCommand = new DelegateCommand(() => new Thread(() => SaveTransaction()).Start(), CanSaveTransaction);
-            RemoveTransactionCommand = new DelegateCommand(() => new Thread(() => RemoveTransaction()).Start(), CanRemoveTransaction);
+            SaveTransactionCommand = new DelegateCommand(SaveTransaction, CanSaveTransaction);
+            RemoveTransactionCommand = new DelegateCommand(RemoveTransaction, CanRemoveTransaction);
 
             if (!_transaction.IsNew) _displayIndex = _wallet.Transactions.IndexOf(_transaction) + 1;
             else _displayIndex = ++newCount;
@@ -63,22 +64,32 @@ namespace BudgetsWPF.Transactions
 
         public async void RemoveTransaction()
         {
-            await RelationService<Wallet, Transaction>.RemoveConnection(_wallet, _transaction);
+            IsEnabled = false;
+            await Task.Run(async () => await RelationService<Wallet, Transaction>.RemoveConnection(_wallet, _transaction));
             _wallet.RemoveTransaction(_transaction);
             _removeTransactionView(this);
+            IsEnabled = true;
         }
         public async void SaveTransaction()
         {
+            IsEnabled = false;
             _wallet.AddTransaction(_transaction);
-            await TransactionService.Add(_transaction);
-            await WalletService.Add(_wallet);
-            await RelationService<Wallet, Transaction>.AddConnection(_wallet, _transaction);
+
+            await Task.Run(async () =>
+            {
+                await TransactionService.Add(_transaction);
+                await WalletService.Add(_wallet);
+                await RelationService<Wallet, Transaction>.AddConnection(_wallet, _transaction);
+
+            });
 
             _transaction.HasChanges = false;
             _transaction.IsNew = false;
             
             RemoveTransactionCommand.RaiseCanExecuteChanged();
             SaveTransactionCommand.RaiseCanExecuteChanged();
+
+            IsEnabled = true;
 
         }
 
@@ -153,7 +164,7 @@ namespace BudgetsWPF.Transactions
                 _transaction.Currency = CurrencyConvertor.CurrencyFromString(value);
 
                 RaisePropertyChanged();
-                Sum = _transaction.Sum.ToString("F");
+                //Sum = _transaction.Sum.ToString("F");
                 RaisePropertyChanged(nameof(Sum));
                 SaveTransactionCommand.RaiseCanExecuteChanged();
             }

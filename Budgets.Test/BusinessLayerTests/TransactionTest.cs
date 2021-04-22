@@ -59,7 +59,7 @@ namespace Budgets.Test.BusinessLayerTests
         public void ExistingRecordTest()
         {
     
-            var c1 = new Transaction(Guid.NewGuid(), Guid.NewGuid(), 10, Currency.EUR, Guid.NewGuid(), "a", new List<string>());
+            var c1 = new Transaction(Guid.NewGuid(), DateTime.Now, 10, Currency.EUR, new Category("a","b"), "a", new List<string>());
 
             Assert.False(c1.IsNew);
         }

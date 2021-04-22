@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
 using BudgetsStorage.Services;
@@ -33,9 +34,9 @@ namespace BudgetsWPF.Wallets
             SignInCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignIn));
             AddWalletCommand = new DelegateCommand(AddWallet);
             
-            SaveUserInfoCommand = new DelegateCommand(() => new Thread(() => SaveUserInfo()).Start(), CanSaveUserInfo);
-            ShareWalletsCommand = new DelegateCommand(() => new Thread(() => ShareWallets()).Start());
-            GoToCategoriesCommand = new DelegateCommand(() => new Thread(() => GoToCategories()).Start());
+            SaveUserInfoCommand = new DelegateCommand(SaveUserInfo, CanSaveUserInfo);
+            ShareWalletsCommand = new DelegateCommand(ShareWallets);
+            GoToCategoriesCommand = new DelegateCommand(GoToCategories);
 
             foreach (var wallet in _user.Wallets)
             {
@@ -66,7 +67,7 @@ namespace BudgetsWPF.Wallets
         public async void SaveUserInfo()
         {
             IsEnabled = false;
-            await UserService.Add(_user);
+            await Task.Run(async () => await UserService.Add(_user));
             _user.HasChanges = false;
             SaveUserInfoCommand.RaiseCanExecuteChanged();
             IsEnabled = true;

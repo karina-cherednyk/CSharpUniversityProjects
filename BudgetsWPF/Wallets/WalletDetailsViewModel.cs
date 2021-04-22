@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
@@ -37,9 +38,9 @@ namespace BudgetsWPF.Wallets
             _selectedCurrency = CurrencyConvertor.CurencyToString(_wallet.Currency);
             _removeWalletFromWalletsView = removeWallet;
 
-            ShowTransactionsCommand = new DelegateCommand(() => new Thread(() => ShowTransactions()).Start());
-            SaveWalletCommand = new DelegateCommand(() => new Thread(() => SaveWallet()).Start(), CanSaveWallet);
-            RemoveWalletCommand = new DelegateCommand(() => new Thread(() => RemoveWallet()).Start(), CanRemoveWallet);
+            ShowTransactionsCommand = new DelegateCommand(ShowTransactions);
+            SaveWalletCommand = new DelegateCommand(SaveWallet, CanSaveWallet);
+            RemoveWalletCommand = new DelegateCommand(RemoveWallet, CanRemoveWallet);
 
             ToggleCategoryCommand = new DelegateCommand(ToggleCategory);
             CategoryBtnText = CHOOSE_CAT;
@@ -88,7 +89,7 @@ namespace BudgetsWPF.Wallets
         public async void RemoveWallet()
         {
             IsEnabled = false;
-            await RelationService<User, Wallet>.RemoveConnection(_user, _wallet);
+            await Task.Run(async () => await RelationService<User, Wallet>.RemoveConnection(_user, _wallet));
             _user.RemoveWallet(_wallet);
             _removeWalletFromWalletsView(this);
 
@@ -98,23 +99,26 @@ namespace BudgetsWPF.Wallets
         {
             IsEnabled = false;
 
-            await WalletService.Add(_wallet);
-            await RelationService<User, Wallet>.AddConnection(_user, _wallet);
-
-
-            if (!_oldCategories.SetEquals(_wallet.Categories))
+            await Task.Run(async () =>
             {
-                var minusCats = _oldCategories.Except(_wallet.Categories);
-                var plusCats = _wallet.Categories.Except(_oldCategories);
-                foreach(var m in minusCats)
+                await WalletService.Add(_wallet);
+                await RelationService<User, Wallet>.AddConnection(_user, _wallet);
+
+
+                if (!_oldCategories.SetEquals(_wallet.Categories))
                 {
-                    await RelationService<Wallet, Category>.RemoveConnection(_wallet, m);
+                    var minusCats = _oldCategories.Except(_wallet.Categories);
+                    var plusCats = _wallet.Categories.Except(_oldCategories);
+                    foreach (var m in minusCats)
+                    {
+                        await RelationService<Wallet, Category>.RemoveConnection(_wallet, m);
+                    }
+                    foreach (var p in plusCats)
+                    {
+                        await RelationService<Wallet, Category>.AddConnection(_wallet, p);
+                    }
                 }
-                foreach(var p in plusCats)
-                {
-                    await RelationService<Wallet, Category>.AddConnection(_wallet, p);
-                }
-            }
+            });
 
             _wallet.HasChanges = false;
             _wallet.IsNew = false;
@@ -144,6 +148,10 @@ namespace BudgetsWPF.Wallets
                     bool changes = _wallet.HasChanges;
                     _wallet.Currency = CurrencyConvertor.CurrencyFromString(value);
                     _wallet.HasChanges = changes;
+                }
+                if(_wallet.Transactions == null)
+                {
+                    MessageBox.Show("Transactions werent loaded yet, balance conversion option is unavailable");
                 }
 
 

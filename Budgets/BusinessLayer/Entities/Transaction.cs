@@ -78,8 +78,9 @@ namespace Budgets.BusinessLayer.Entities
             }
 
             return
-                !string.IsNullOrWhiteSpace(Description) &
-                Sum != 0 &
+                Category != null &&
+                !string.IsNullOrWhiteSpace(Description) &&
+                Sum != 0 &&
                 validFiles;
         }
     }

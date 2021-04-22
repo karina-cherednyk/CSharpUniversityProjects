@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Budgets.BusinessLayer.Entities;
 using Budgets.Common;
@@ -24,7 +25,7 @@ namespace BudgetsWPF.Authentication
         {
 
 
-            SignUpCommand = new DelegateCommand(() => new Thread(() => SignUp()).Start(), IsSignUpEnabled);
+            SignUpCommand = new DelegateCommand(() => Task.Run(SignUp), IsSignUpEnabled);
             SignInCommand = new DelegateCommand(() => MainNavigator.Navigate(NavigatableType.SignIn));
         }
 

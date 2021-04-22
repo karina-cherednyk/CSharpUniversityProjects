@@ -35,18 +35,11 @@ namespace Budgets.Test.BusinessLayerTests
         }
 
 
-        [Fact]
-        public void NewRecordTest()
-        {
-            var c = new User(Guid.NewGuid(), "Bob", "Johns", "a@a.com");
-
-            Assert.True(c.IsNew);
-        }
 
         [Fact]
         public void ExistingRecordTest()
         {
-            var c = new User(Guid.NewGuid(),  "Bob", "Johns", "a@a.com", new HashSet<Guid>(), new HashSet<Guid>());
+            var c = new User(Guid.NewGuid(),  "Bob", "Johns", "a@a.com");
 
             Assert.False(c.IsNew);
         }
